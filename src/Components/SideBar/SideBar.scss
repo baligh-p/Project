@@ -1,0 +1,75 @@
+.linksContainer {
+  .deconnecter {
+    margin-top: 8px;
+  }
+}
+.customScrollBar {
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: #2c2c2c;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: rgb(78, 134, 238);
+    border-radius: 2px;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgb(78, 134, 238);
+  }
+}
+.selectedLink {
+  color: white;
+  fill: white;
+  background-color: rgb(82, 82, 82, 0.8);
+  margin-bottom: 8px;
+  margin-top: 8px;
+}
+.notSelectedLink {
+  margin-bottom: 8px;
+  margin-top: 8px;
+  color: rgb(168, 162, 158);
+  fill: rgb(168, 162, 158);
+}
+
+/*burger class*/
+
+#burger.active ::before {
+  transform: translateY(0px) rotate(45deg);
+  box-shadow: 0 0 0 #3356f2;
+}
+#burger.active ::after {
+  transform: translateY(0px) rotate(-45deg);
+}
+.burgerLight {
+  width: min-content;
+  height: 60px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+  &::before {
+    content: "";
+    position: absolute;
+    width: 35px;
+    height: 4px;
+    background: white;
+    transition: 0.2s;
+    transform: translateY(-10px);
+    box-shadow: 0 10px 0 white;
+  }
+  &::after {
+    content: "";
+    width: 35px;
+    height: 4px;
+    background: white;
+    transition: 0.2s;
+    transform: translateY(10px);
+  }
+}
