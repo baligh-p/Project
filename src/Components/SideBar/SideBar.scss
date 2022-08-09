@@ -42,7 +42,7 @@
 
 #burger.active ::before {
   transform: translateY(0px) rotate(45deg);
-  box-shadow: 0 0 0 #3356f2;
+  box-shadow: 0 0 0 white;
 }
 #burger.active ::after {
   transform: translateY(0px) rotate(-45deg);
@@ -72,4 +72,34 @@
     transition: 0.2s;
     transform: translateY(10px);
   }
+}
+
+.sideBar {
+  transition: left 0.7s;
+}
+
+.customScrollBar {
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: rgb(235, 234, 234);
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: rgb(47, 144, 255);
+    border-radius: 2px;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgb(78, 134, 238);
+  }
+}
+
+.tableIp {
+  max-height: calc(100vh - 220px);
 }
