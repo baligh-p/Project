@@ -9,16 +9,16 @@ const App = () => {
       <Routes>
         <Route path="/" element={<AuthRouter />}>
           <Route path="" element={<SideBar />}></Route>
-          <Route path="IP_List" element={<ErrorBoundaries><ListPage /></ErrorBoundaries>}>
-            <Route path=":direction" element={<SideBar />} />
+          <Route path="IP_List" element={<ListPage />}>
+            <Route path=":direction" element={<div></div>} />
           </Route>
           <Route path="History" element={<SideBar />}></Route>
           <Route path="MyProfile" element={<SideBar />}></Route>
           <Route path="Add_Marks" element={<SideBar />} ></Route>
           <Route path="Add_User" element={<SideBar />} ></Route>
         </Route>
-      </Routes>
-    </BrowserRouter>
+      </Routes >
+    </BrowserRouter >
   );
 }
 

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import SideBar from '../SideBar/SideBar'
+import "./ListPage.scss"
 const ListPage = () => {
     const [searchValue, setSearchValue] = useState("")
     const [searchMethod, setSearchMethod] = useState("")
@@ -15,7 +16,7 @@ const ListPage = () => {
             <SideBar />
             <div className='lg:t-w-[79.5%] t-w-full t-h-full t-ml-auto t-relative lg:t-top-[10px] t-top-[5rem]'>
                 <div className='t-w-10/12 t-mx-auto t-mb-5 t-hidden lg:t-flex'>
-                    <div className='t-bg-indigo-500 t-flex t-items-center t-justify-center t-h-28 t-shadow-lg t-shadow-neutral-300 t-rounded-md t-w-52'>
+                    <div className='wdj  t-bg-indigo-500 t-flex t-items-center t-justify-center t-h-28 t-shadow-lg t-shadow-neutral-300 t-rounded-md t-w-52'>
                         <div className=' t-flex-none'>
                             <img src="/icons/ip.png" className='t-h-20 t-ml-4 t-w-20' />
                         </div>
@@ -25,8 +26,8 @@ const ListPage = () => {
                         </div>
                     </div>
                 </div>
-                <div className='t-mx-auto lg:t-flex t-items-center t-w-10/12 t-mb-5'>
-                    <div className='t-flex t-items-center '>
+                <div className='t-mx-auto t-flex t-items-center lg:t-w-10/12 t-w-[96%] t-mb-5'>
+                    <div className='t-flex opacityAnimation t-items-center'>
                         <input onInput={(e) => { setSearchValue(() => e.target.value) }} className='t-border-2 t-border-r-0 t-rounded-l-sm t-border-blue-500 focus:t-outline-none 
                         t-py-2 t-px-2 t-box-content lg:t-w-full t-w-full' type="text" placeholder={'Chercher avec ' + searchMethod} />
                         <select ref={searchMethodSelect} onChange={(e) => { setSearchMethod(e.target.value) }} className='t-cursor-pointer t-h-[44px] t-bg-blue-500 t-outline-none t-text-white t-text-[12px] t-w-20 t-text-center t-rounded-r-sm'>
@@ -36,7 +37,7 @@ const ListPage = () => {
                         </select>
                     </div>
 
-                    <div className='t-flex t-flex-col t-ml-auto t-mr-5'>
+                    <div className='lg:t-flex opacityAnimation t-hidden t-flex-col t-ml-auto t-mr-5'>
                         <label className='t-text-white t-h-0 t-text-[10px] t-relative t-left-0.5 t-bottom-px'>Type</label>
                         <select defaultValue={"tout"} onChange={(e) => { setTypeFilter(e.target.value) }} className="t-cursor-pointer t-px-1 t-shadow-md t-h-[44px] t-bg-blue-500 t-outline-none t-text-white t-text-[13px] t-w-min t-min-w-[96px] t-text-center t-rounded-sm">
                             <option className='t-bg-white t-text-black t-text-[13px]' value="tout">Tout</option>
@@ -45,18 +46,18 @@ const ListPage = () => {
                         </select>
                     </div>
 
-                    <div className='t-flex t-flex-col t-mx-5'>
+                    <div className='lg:t-flex opacityAnimation t-hidden t-flex-col t-mx-5'>
                         <label className='t-text-white t-h-0 t-text-[10px] t-relative t-left-0.5 t-bottom-px'>Mark</label>
-                        <select className="t-cursor-pointer t-h-[44px] t-px-1 t-bg-blue-500 t-outline-none t-text-white t-text-[13px]  lg:t-w-min t-min-w-[96px]  t-text-center t-rounded-sm t-shadow-md" defaultValue={"tout"} onChange={(e) => { setMarkFilter(e.target.value) }}>
+                        <select className="t-cursor-pointer t-h-[44px] t-px-1 t-bg-blue-500 t-outline-none t-text-white t-text-[13px] lg:t-w-min t-min-w-[96px] t-text-center t-rounded-sm t-shadow-md" defaultValue={"tout"} onChange={(e) => { setMarkFilter(e.target.value) }}>
                             <option className='t-bg-white t-text-black t-text-[13px]' value="tout">Tout</option>
                             <option className='t-bg-white t-text-black t-text-[13px]' value="imprimante">Asus</option>
                             <option className='t-bg-white t-text-black t-text-[13px]' value="pc">HP</option>
                         </select>
                     </div>
 
-                    <button className='t-text-white t-shadow-md t-duration-200  t-fill-white hover:t-fill-blue-500 t-hidden lg:t-flex t-items-center t-justify-center t-delay-75 t-ml-auto t-mr-5 t-rounded-full t-bg-blue-500 t-border-2 t-border-blue-500 hover:t-bg-white hover:t-text-blue-500 t-h-min t-px-4 t-py-1'>
+                    <button className='t-text-white opacityAnimation t-shadow-md t-duration-200  t-fill-white hover:t-fill-blue-500 t-flex t-items-center t-justify-center t-delay-75 t-ml-auto lg:t-mr-5 lg:t-rounded-full t-rounded-md t-bg-blue-500 t-border-2 t-border-blue-500 hover:t-bg-white hover:t-text-blue-500 t-h-min lg:t-px-4 t-px-1 lg:t-py-1 t-py-2'>
                         <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M11 19v-6H5v-2h6V5h2v6h6v2h-6v6Z" /></svg>
-                        <p>Ajouter</p>
+                        <p className='t-text-[14px]'>Ajouter</p>
                     </button>
                 </div>
                 <div className="customScrollBar tableIp t-font-body t-overflow-auto t-h-min t-shadow-md sm:t-rounded-lg lg:t-w-10/12 t-w-[95%] t-mx-auto">

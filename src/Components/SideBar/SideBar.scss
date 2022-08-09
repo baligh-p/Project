@@ -1,3 +1,23 @@
+@keyframes tabAnimation {
+  from {
+    position: relative;
+    bottom: calc(220px - 100vh);
+    opacity: 0;
+  }
+  to {
+    position: relative;
+    bottom: 0;
+    opacity: 1;
+  }
+}
+@keyframes opacityAnimation {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 .linksContainer {
   .deconnecter {
     margin-top: 8px;
@@ -102,4 +122,14 @@
 
 .tableIp {
   max-height: calc(100vh - 220px);
+  animation-name: tabAnimation;
+  animation-duration: 0.5s;
+}
+
+.filterHeight {
+  color: red;
+}
+.opacityAnimation {
+  animation-name: opacityAnimation;
+  animation-duration: 1.5s;
 }

@@ -1,0 +1,22 @@
+@keyframes wjAnim {
+  from {
+    position: relative;
+    top: -100px;
+    opacity: 0;
+  }
+  to {
+    position: relative;
+    top: 0;
+    opacity: 1;
+  }
+}
+
+.wdj {
+  animation-name: wjAnim;
+  animation-duration: 0.5s;
+}
+
+.wdj1 {
+  @extend .wdj;
+  animation-delay: 0.3s;
+}
