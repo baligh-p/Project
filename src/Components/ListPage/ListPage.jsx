@@ -18,7 +18,7 @@ const ListPage = () => {
                 <div className='t-w-10/12 t-mx-auto t-mb-5 t-hidden lg:t-flex'>
                     <div className='wdj  t-bg-indigo-500 t-flex t-items-center t-justify-center t-h-28 t-shadow-lg t-shadow-neutral-300 t-rounded-md t-w-52'>
                         <div className=' t-flex-none'>
-                            <img src="/icons/ip.png" className='t-h-20 t-ml-4 t-w-20' />
+                            <img src="/assets/icons/ip.png" className='t-h-20 t-ml-4 t-w-20' />
                         </div>
                         <div className='t-ml-2'>
                             <p className='t-text-[25px] t-text-white t-font-body t-font-bold'>50</p>

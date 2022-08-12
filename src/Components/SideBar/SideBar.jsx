@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { Link, useLocation, useParams } from "react-router-dom"
+import { UserAtom } from '../../SharedStates/SharedUserState'
+import { useRecoilState } from 'recoil'
 import "./SideBar.scss"
 const SideBar = () => {
     const location = useLocation()
@@ -7,7 +9,7 @@ const SideBar = () => {
     const sideBar = useRef(null)
 
     const [showSecondSideBar, setShowSecondSideBar] = useState(false)
-
+    const [user, setUser] = useRecoilState(UserAtom)
 
     const directions = ["dr1", "dr2", "dr3", "dr4", "dr5", "dr6", "dr7", "dr8", "dr9", "dr10"]
     useEffect(() => {
@@ -57,6 +59,11 @@ const SideBar = () => {
     const closeSideBar = () => {
         document.getElementById("burger").classList.remove("active")
         sideBar.current.classList.replace("t-left-0", "-t-left-full")
+    }
+    const logout = () => {
+        localStorage.refresh_tkn = ""
+        localStorage.access_tkn = ""
+        setUser({ isLogged: false })
     }
     return (
         <div ref={sideBar} className='sideBar t-font-body lg:t-w-[20.5%] t-w-full t-z-50 t-fixed lg:t-top-0 t-top-[4.3rem] t-duration-500 t-delay-75 lg:t-left-0 -t-left-full  t-bg-[#202020] t-h-full t-px-5 t-py-3'>
@@ -111,7 +118,7 @@ const SideBar = () => {
                         </svg>
                         <h3 className='t-ml-3 t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>Baligh Zoghlami</h3>
                     </Link>
-                    <div className='deconnecter hover:t-text-white hover:t-fill-white t-duration-200 t-delay-75 t-select-none t-text-body t-cursor-pointer t-w-full t-px-2 t-text-red-500 t-fill-red-500 t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
+                    <div onClick={logout} className='deconnecter hover:t-text-white hover:t-fill-white t-duration-200 t-delay-75 t-select-none t-text-body t-cursor-pointer t-w-full t-px-2 t-text-red-500 t-fill-red-500 t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
                         <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
                             <path d="M5.775 21.5q-.925 0-1.537-.613-.613-.612-.613-1.537V5.95q0-.925.613-1.538Q4.85 3.8 5.775 3.8h6.4v1.35h-6.4q-.3 0-.55.25-.25.25-.25.55v13.4q0 .3.25.55.25.25.55.25h6.4v1.35Zm10.5-4.75-1.025-1 2.45-2.45H9.075v-1.35H17.7L15.25 9.5l1.025-.95 4.1 4.1Z" />
                         </svg>
