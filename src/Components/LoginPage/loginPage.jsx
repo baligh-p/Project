@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import Loader from "../Loader/Loader"
 import { customAxios } from '../../CustomElement/axios'
 import { UserAtom } from '../../SharedStates/SharedUserState'
@@ -40,7 +39,6 @@ const LoginPage = () => {
         else setValid(false)
     }, [username, password])
 
-    const navigate = useNavigate()
     const handleSubmit = async () => {
         if (valid) {
             setIsLoading(true)
@@ -49,10 +47,10 @@ const LoginPage = () => {
             data.append("password", password)
             customAxios.post("/login", data).then((res) => {
                 if (res.status == 200) {
-                    if (res.data.access_token) {
+                    if (res.data.success == "true") {
                         localStorage.access_tkn = res.data.access_token
                         localStorage.refresh_tkn = res.data.refresh_token
-                        setUser({ ...user, isLogged: true })
+                        setUser({ isLogged: true, username: res.data.username })
                     }
                     else {
                         setValid(false)
@@ -60,13 +58,7 @@ const LoginPage = () => {
                     }
                 }
             }).catch((err) => {
-                if (err.response.data.success == "false") {
-                    setValid(false)
-                    setIsLoading(false)
-                }
-                else {
 
-                }
             })
         }
 

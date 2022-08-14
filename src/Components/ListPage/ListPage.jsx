@@ -1,14 +1,71 @@
 import React, { useState, useRef, useEffect } from 'react'
 import SideBar from '../SideBar/SideBar'
 import "./ListPage.scss"
+import { customAxios } from "../../CustomElement/axios"
+import { useRecoilState } from "recoil"
+import { UserAtom } from '../../SharedStates/SharedUserState'
 const ListPage = () => {
     const [searchValue, setSearchValue] = useState("")
     const [searchMethod, setSearchMethod] = useState("")
     const [typeFilter, setTypeFilter] = useState("")
     const [markFilter, setMarkFilter] = useState("")
+
+    const [user, setUser] = useRecoilState(UserAtom)
+
     const searchMethodSelect = useRef(null)
+
     useEffect(() => {
         setSearchMethod(searchMethodSelect.current.value)
+    }, [])
+
+    useEffect(() => {
+
+        const getIPs = async () => {
+            customAxios.get("/ip/getIPs", {
+                headers: {
+                    Authorization: `Bearer ${localStorage.access_tkn}`
+                }
+            })
+                .then((res) => {
+                    console.log(res.data)
+                })
+        }
+
+        customAxios.get("/ip/getIPs", {
+            headers: {
+                Authorization: `Bearer ${localStorage.access_tkn}`
+            }
+        })
+            .then((response) => {
+                if (response.data.type && response.data.type == "token") {
+                    if (response.data.error.startsWith("The Token has expired on")) {
+                        customAxios.get("/tkn/refresh", {
+                            headers: {
+                                Authorization: `Bearer ${localStorage.refresh_tkn}`
+                            }
+                        }).then(async (res) => {
+                            if (res.data.type != "token") {
+                                localStorage.access_tkn = res.data.access_token
+                                localStorage.refresh_tkn = res.data.refresh_token
+                                //fn
+                                getIPs()
+                            }
+                            else {
+                                setUser({ isLogged: false })
+                            }
+                        })
+                    } else {
+                        setUser({ isLogged: false })
+                    }
+                }
+                else {
+                    //fn
+                    getIPs()
+                }
+            })
+            .catch((err) => {
+                /*other erros :: Unautorized*/
+            })
     }, [])
 
     return (

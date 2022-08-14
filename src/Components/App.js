@@ -1,5 +1,5 @@
+import { useEffect } from "react"
 import { Route, Routes, BrowserRouter } from "react-router-dom"
-
 
 import AuthRouter from "../CustomRoutes/AuthRouter";
 import NotLoggedRouter from "../CustomRoutes/NotLoggedRouter";
@@ -7,9 +7,9 @@ import NotLoggedRouter from "../CustomRoutes/NotLoggedRouter";
 import ListPage from "./ListPage/ListPage";
 import SideBar from "./SideBar/SideBar";
 import LoginPage from "./LoginPage/LoginPage";
-import ErrorBoundaries from "./ErrorBoundaries/ErrorBoundaries"
 
 const App = () => {
+
   return (
     <BrowserRouter>
       <Routes>
