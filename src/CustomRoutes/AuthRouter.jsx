@@ -3,10 +3,10 @@ import { Navigate, Outlet } from 'react-router-dom'
 import { UserAtom } from '../SharedStates/SharedUserState'
 import { useRecoilState } from 'recoil'
 import { customAxios } from '../CustomElement/axios'
+import Loader from '../Components/Loader/Loader'
 const AuthRouter = () => {
     const [user, setUser] = useRecoilState(UserAtom)
     useEffect(() => {
-        console.log("route render");
         if (user.isLogged) {
             const url = !localStorage.clid ? `/user/getUserByName/${user.username}` : `/user/getUser/${localStorage.clid}`
             const getUser = () => {
@@ -15,7 +15,6 @@ const AuthRouter = () => {
                         Authorization: `Bearer ${localStorage.access_tkn}`
                     }
                 }).then((res) => {
-                    console.log(res.data)
                     setUser({ ...user, id: res.data.id, username: res.data.username, role: res.data.role })
                     localStorage.clid = res.data.id
                 })
@@ -56,7 +55,16 @@ const AuthRouter = () => {
         }
     }, [])
 
-    if (user.isLogged) return (<Outlet />)
+    if (user.isLogged) {
+        if (!user.role) {
+            return <div className='t-h-screen t-w-full t-items-center t-justify-center t-flex t-bg-white'>
+                <Loader className="lg:t-mx-0 t-mx-auto" height="70px" size="60px" border="7px" color="#60a5fa" />
+            </div>
+        }
+        else {
+            return (<Outlet />)
+        }
+    }
     else return <Navigate to="/Login" />
 }
 
