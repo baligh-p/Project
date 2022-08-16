@@ -20,3 +20,29 @@
   @extend .wdj;
   animation-delay: 0.3s;
 }
+
+.customTextAreaScrollBar {
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: rgb(235, 234, 234);
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: rgb(56, 56, 56);
+    border-radius: 2px;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgb(110, 110, 110);
+  }
+}
+
+.errorClass {
+  color: rgb(255, 82, 82);
+}

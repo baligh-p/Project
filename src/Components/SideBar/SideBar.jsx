@@ -43,7 +43,7 @@ const SideBar = () => {
         }
         //Add_User
         else if (location.pathname.split("/").filter(element => element != "").find(element => element == "Add_User")) {
-            document.querySelector(".addUser").classList.replace("notSelectedLink", "selectedLink")
+            document.querySelector(".addUser").classList?.replace("notSelectedLink", "selectedLink")
         }
         else {
             document.querySelector(".stat").classList.replace("notSelectedLink", "selectedLink")
@@ -110,12 +110,12 @@ const SideBar = () => {
                         <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M11.25 18.75v-6h-6v-1.5h6v-6h1.5v6h6v1.5h-6v6Z" /></svg>
                         <h3 className='t-ml-3 t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>Ajouter une marque</h3>
                     </Link>
-                    <Link onClick={closeSideBar} to="/Add_User" className='addUser t-select-none t-text-body hover:t-ml-1 t-cursor-pointer t-w-full t-px-2  t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
+                    {user?.role == "ROLE_ADMIN" && <Link onClick={closeSideBar} to="/Add_User" className='addUser t-select-none t-text-body hover:t-ml-1 t-cursor-pointer t-w-full t-px-2  t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
                         <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
                             <path d="M18.125 13.75v-3h-3v-1.5h3v-3h1.5v3h3v1.5h-3v3Zm-9.25-2.05q-1.45 0-2.475-1.038Q5.375 9.625 5.375 8.2q0-1.45 1.025-2.475Q7.425 4.7 8.875 4.7q1.45 0 2.475 1.025Q12.375 6.75 12.375 8.2q0 1.425-1.025 2.462Q10.325 11.7 8.875 11.7Zm-7.5 7.6v-2.225q0-.725.4-1.35.4-.625 1.075-.975 1.475-.725 2.988-1.088Q7.35 13.3 8.875 13.3t3.038.362q1.512.363 2.987 1.088.675.35 1.075.975.4.625.4 1.35V19.3Zm1.5-1.5h12v-.725q0-.3-.175-.55-.175-.25-.475-.425-1.3-.625-2.637-.963-1.338-.337-2.713-.337t-2.713.337q-1.337.338-2.637.963-.3.175-.475.425t-.175.55Zm6-7.6q.825 0 1.413-.588.587-.587.587-1.412t-.587-1.413Q9.7 6.2 8.875 6.2q-.825 0-1.412.587-.588.588-.588 1.413 0 .825.588 1.412.587.588 1.412.588Zm0-2Zm0 6.6Z" />
                         </svg>
                         <h3 className='t-ml-3 t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>Ajouter un Utilisateur</h3>
-                    </Link>
+                    </Link>}
                     <Link onClick={closeSideBar} to="/MyProfile" className='myPF t-select-none hover:t-relative hover:t-left-1 t-text-body t-cursor-pointer  t-w-full t-px-2  t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
                         <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
                             <path d="M5.975 17.425q1.4-.975 2.863-1.5Q10.3 15.4 12 15.4t3.163.525q1.462.525 2.862 1.5 1.025-1.15 1.575-2.487.55-1.338.55-2.938 0-3.35-2.4-5.75T12 3.85q-3.35 0-5.75 2.4T3.85 12q0 1.6.55 2.938.55 1.337 1.575 2.487ZM12 12.95q-1.45 0-2.45-1-1-1-1-2.45 0-1.45 1-2.45 1-1 2.45-1 1.45 0 2.45 1 1 1 1 2.45 0 1.45-1 2.45-1 1-2.45 1Zm0 8.55q-1.95 0-3.688-.75-1.737-.75-3.025-2.038Q4 17.425 3.25 15.688q-.75-1.738-.75-3.713 0-1.95.75-3.675Q4 6.575 5.287 5.287 6.575 4 8.312 3.25q1.738-.75 3.713-.75 1.95 0 3.675.75 1.725.75 3.012 2.037Q20 6.575 20.75 8.3q.75 1.725.75 3.7 0 1.95-.75 3.688-.75 1.737-2.038 3.024Q17.425 20 15.7 20.75q-1.725.75-3.7.75Zm0-1.35q1.275 0 2.637-.475 1.363-.475 2.338-1.3-.975-.75-2.262-1.187-1.288-.438-2.713-.438t-2.725.425q-1.3.425-2.25 1.2.975.825 2.338 1.3 1.362.475 2.637.475Zm0-8.55q.85 0 1.475-.625.625-.625.625-1.475 0-.85-.625-1.475Q12.85 7.4 12 7.4q-.85 0-1.475.625Q9.9 8.65 9.9 9.5q0 .85.625 1.475.625.625 1.475.625Zm0-2.1Zm0 8.95Z" />

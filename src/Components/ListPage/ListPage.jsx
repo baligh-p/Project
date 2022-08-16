@@ -6,11 +6,16 @@ import { customAxios } from "../../CustomElement/axios"
 import { useRecoilState } from "recoil"
 import { UserAtom } from '../../SharedStates/SharedUserState'
 import Loader from '../Loader/Loader'
+import Line from './Line'
+import { NotificationAtom } from '../../SharedStates/NotificationAtom'
 const ListPage = () => {
     const [searchValue, setSearchValue] = useState("")
+
     const [searchMethod, setSearchMethod] = useState("")
-    const [typeFilter, setTypeFilter] = useState("")
-    const [markFilter, setMarkFilter] = useState("")
+
+    const [typeFilter, setTypeFilter] = useState("tout")
+
+    const [markFilter, setMarkFilter] = useState("tout")
 
     const [selectedIp, setSelectedIp] = useState({})
 
@@ -18,14 +23,21 @@ const ListPage = () => {
 
     const [isDeleting, setIsDeleting] = useState(null)
 
+    const [firstGet, setFirstGet] = useState(false)
+
+    const [addLine, setAddLine] = useState(false)
+
+    const [notification, setNotification] = useRecoilState(NotificationAtom)
+
+
     const [user, setUser] = useRecoilState(UserAtom)
 
-    const [firstGet, setFirstGet] = useState(false)
 
     const searchMethodSelect = useRef(null)
     const table = useRef(null)
 
     const { direction } = useParams()
+
     useEffect(() => {
         setSearchMethod(searchMethodSelect.current.value)
     }, [])
@@ -44,7 +56,6 @@ const ListPage = () => {
             })
                 .then((res) => {
                     setIps(res.data)
-                    console.log(res.data)
                 }).catch((err) => {
                     console.log(err)
                 })
@@ -78,14 +89,16 @@ const ListPage = () => {
                                     }
                                 }
                                 else {
-                                    setUser({ isLogged: false })
+                                    setUser({ isLogged: false, id: null, username: null, role: null })
+                                    localStorage.clid = ""
                                 }
                             }).catch((err) => {
                                 console.log("refresh token")
                                 console.log(err)
                             })
                         } else {
-                            setUser({ isLogged: false })
+                            setUser({ isLogged: false, id: null, username: null, role: null })
+                            localStorage.clid = ""
                         }
                     }
                     else if (Array.isArray(response.data)) {
@@ -94,13 +107,10 @@ const ListPage = () => {
                             setFirstGet(false)
                             setSelectedIp({})
                         }
-                        console.log(response.data)
                     }
                 })
                 .catch((err) => {
-                    /*other erros :: Unautorized*/
                     console.log(err)
-
                 })
         }
 
@@ -121,74 +131,7 @@ const ListPage = () => {
 
     useMemo(() => { if (!firstGet) setFirstGet(true) }, [direction])
 
-    const addIp = (data) => {
-        customAxios.post("/ip/addIP", data, {
-            headers: {
-                Authorization: `Bearer ${localStorage.access_tkn}`
-            }
-        }).then((res) => {
-            console.log(res.data)
-        })
-    }
 
-    const addLigne = () => {
-        const data = JSON.stringify({
-            address: "192.168.0.3",
-            bureau: "b123",
-            direction: "mmll",
-            noms: "Baligh atef",
-            idType: 2,
-            idMark: 3
-        })
-
-
-
-
-        // customAxios.post("/ip/addIP", data, {
-        //     headers: {
-        //         Authorization: `Bearer ${localStorage.access_tkn}`,
-        //         'Content-Type': "application/json"
-        //     },
-        // })
-        //     .then((response) => {
-        //         if (response.data.type && response.data.type == "token") {
-        //             if (response.data.error.startsWith("The Token has expired on")) {
-        //                 customAxios.get("/tkn/refresh", {
-        //                     headers: {
-        //                         Authorization: `Bearer ${localStorage.refresh_tkn}`,
-        //                         'Content-Type': "application/json"
-        //                     },
-        //                 }).then(async (res) => {
-        //                     if (res.data.type != "token") {
-        //                         localStorage.access_tkn = res.data.access_token
-        //                         localStorage.refresh_tkn = res.data.refresh_token
-        //                         //fn
-        //                         addIp(data)
-        //                     }
-        //                     else {
-        //                         setUser({ isLogged: false })
-        //                     }
-        //                 }).catch((err) => {
-        //                     console.log("refresh token")
-        //                     console.log(err)
-        //                 })
-        //             } else {
-        //                 setUser({ isLogged: false })
-        //             }
-        //         }
-        //         else if (response.data.exist == false) {
-
-        //         }
-        //         else if (response.data.exist == true) {
-
-        //         }
-        //     })
-        //     .catch((err) => {
-        //         /*other erros :: Unautorized*/
-        //         console.log(err)
-
-        //     })
-    }
 
     const deleteRequest = (id) => {
         customAxios.delete(`/ip/deleteIP/${id}`, {
@@ -202,6 +145,12 @@ const ListPage = () => {
             }
             else if (response.data.success == false) {
                 setIsDeleting(false)
+                setNotification({
+                    ...notification,
+                    visible: true,
+                    message: "Adresse IP n'existe pas",
+                    type: "warning"
+                })
             }
         })
     }
@@ -228,14 +177,16 @@ const ListPage = () => {
                                 deleteRequest(id)
                             }
                             else {
-                                setUser({ isLogged: false })
+                                setUser({ isLogged: false, id: null, username: null, role: null })
+                                localStorage.clid = ""
                             }
                         }).catch((err) => {
                             console.log("refresh token")
                             console.log(err)
                         })
                     } else {
-                        setUser({ isLogged: false })
+                        setUser({ isLogged: false, id: null, username: null, role: null })
+                        localStorage.clid = ""
                     }
                 }
                 else if (response.data.success == true) {
@@ -244,6 +195,12 @@ const ListPage = () => {
                 }
                 else if (response.data.success == false) {
                     setIsDeleting(false)
+                    setNotification({
+                        ...notification,
+                        visible: true,
+                        message: "Adresse IP n'existe pas",
+                        type: "warning"
+                    })
                 }
             })
             .catch((err) => {
@@ -254,13 +211,6 @@ const ListPage = () => {
     }
     const confirmDelete = (id, address) => {
         setSelectedIp({ id, address })
-    }
-    const search = (e) => {
-        setSearchValue(() => e.target.value)
-        if (e.target.value) {
-
-            setIps(() => ips.filter((element) => element.address.startsWith(e.target.value)))
-        }
     }
     return (
         <div className='t-flex t-font-body t-items-start t-h-full'>
@@ -303,37 +253,37 @@ const ListPage = () => {
                 </div>
                 <div className='t-mx-auto t-flex t-items-center lg:t-w-10/12 t-w-[96%] t-mb-5'>
                     <div className='t-flex opacityAnimation t-items-center'>
-                        <input onInput={search} className='t-border-2 t-border-r-0 t-rounded-l-sm t-border-blue-500 focus:t-outline-none 
+                        <input onInput={(e) => { setSearchValue(() => e.target.value) }} className='t-border-2 t-border-r-0 t-rounded-l-sm t-border-blue-500 focus:t-outline-none 
                         t-py-2 t-px-2 t-box-content lg:t-w-full t-w-full' type="text" placeholder={'Chercher avec ' + searchMethod} />
                         <select ref={searchMethodSelect} onChange={(e) => { setSearchMethod(e.target.value) }} className='t-cursor-pointer t-h-[44px] t-bg-blue-500 t-outline-none t-text-white t-text-[12px] t-w-20 t-text-center t-rounded-r-sm'>
                             <option className='t-bg-white t-text-black t-text-[14px]' value="ip">Adresse IP</option>
                             <option className='t-bg-white t-text-black t-text-[14px]' value="bureau">Bureau</option>
-                            <option className='t-bg-white t-text-black t-text-[14px]' value="nom">Nom</option>
+                            <option className='t-bg-white t-text-black t-text-[14px]' value="nom">Noms</option>
                         </select>
                     </div>
 
                     <div className='lg:t-flex opacityAnimation t-hidden t-flex-col t-ml-auto t-mr-5'>
                         <label className='t-text-white t-h-0 t-text-[10px] t-relative t-left-0.5 t-bottom-px'>Type</label>
                         <select defaultValue={"tout"} onChange={(e) => { setTypeFilter(e.target.value) }} className="t-cursor-pointer t-px-1 t-shadow-md t-h-[44px] t-bg-blue-500 t-outline-none t-text-white t-text-[13px] t-w-min t-min-w-[96px] t-text-center t-rounded-sm">
-                            <option className='t-bg-white t-text-black t-text-[13px]' value="tout">Tout</option>
-                            <option className='t-bg-white t-text-black t-text-[13px]' value="imprimante">Imprimante Protable</option>
-                            <option className='t-bg-white t-text-black t-text-[13px]' value="pc">PC</option>
+                            <option className='t-bg-white t-text-black t-text-[14px]' value="tout">Tout</option>
+                            <option className='t-bg-white t-text-black t-text-[14px]' value="imprimante">Imprimante</option>
+                            <option className='t-bg-white t-text-black t-text-[14px]' value="pc">PC</option>
                         </select>
                     </div>
 
                     <div className='lg:t-flex opacityAnimation t-hidden t-flex-col t-mx-5'>
                         <label className='t-text-white t-h-0 t-text-[10px] t-relative t-left-0.5 t-bottom-px'>Mark</label>
                         <select className="t-cursor-pointer t-h-[44px] t-px-1 t-bg-blue-500 t-outline-none t-text-white t-text-[13px] lg:t-w-min t-min-w-[96px] t-text-center t-rounded-sm t-shadow-md" defaultValue={"tout"} onChange={(e) => { setMarkFilter(e.target.value) }}>
-                            <option className='t-bg-white t-text-black t-text-[13px]' value="tout">Tout</option>
-                            <option className='t-bg-white t-text-black t-text-[13px]' value="imprimante">Asus</option>
-                            <option className='t-bg-white t-text-black t-text-[13px]' value="pc">HP</option>
+                            <option className='t-bg-white t-text-black t-text-[14px]' value="tout">Tout</option>
+                            <option className='t-bg-white t-text-black t-text-[14px]' value="asus">Asus</option>
+                            <option className='t-bg-white t-text-black t-text-[14px]' value="hp">HP</option>
                         </select>
                     </div>
 
-                    <button onClick={addLigne} className='t-text-white opacityAnimation t-shadow-md t-duration-200  t-fill-white hover:t-fill-blue-500 t-flex t-items-center t-justify-center t-delay-75 t-ml-auto lg:t-mr-5 lg:t-rounded-full t-rounded-md t-bg-blue-500 t-border-2 t-border-blue-500 hover:t-bg-white hover:t-text-blue-500 t-h-min lg:t-px-4 t-px-1 lg:t-py-1 t-py-2'>
+                    {<button disabled={addLine} style={{ opacity: !addLine ? 1 : 0 }} onClick={() => { setAddLine(true) }} className='t-text-white opacityAnimation t-shadow-md t-duration-200  t-fill-white hover:t-fill-blue-500 t-flex t-items-center t-justify-center t-delay-75 t-ml-auto lg:t-mr-5 lg:t-rounded-full t-rounded-md t-bg-blue-500 t-border-2 t-border-blue-500 hover:t-bg-white hover:t-text-blue-500 t-h-min lg:t-px-4 t-px-1 lg:t-py-1 t-py-2'>
                         <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M11 19v-6H5v-2h6V5h2v6h6v2h-6v6Z" /></svg>
                         <p className='t-text-[14px]'>Ajouter</p>
-                    </button>
+                    </button>}
                 </div>
                 <div className="customScrollBar tableIp t-font-body t-overflow-auto t-h-min t-shadow-md sm:t-rounded-lg lg:t-w-10/12 t-w-[95%] t-mx-auto">
                     <table className="t-w-full t-text-sm t-text-left t-text-gray-500 dark:t-text-gray-400">
@@ -357,13 +307,34 @@ const ListPage = () => {
                                 <th scope="col" className="t-py-3 t-px-6">
                                     Noms
                                 </th>
-                                <th scope='col' className='t-py-3 t-px-6'>
+                                <th scope='col' className='t-py-3 t-px-6 t-flex-1'>
                                     Editer
                                 </th>
                             </tr>
                         </thead>
                         <tbody ref={table}>
-                            {ips?.map((ip, index) => {
+                            <Line display={addLine} firstGet={firstGet} setFirstGet={() => { setFirstGet(true) }} removeLigne={() => { setAddLine(false) }} />
+                            {ips?.filter((element) => {
+                                var ret = true
+                                if (searchValue) {
+                                    if (searchMethod === "ip") {
+                                        ret = element.address.startsWith(searchValue)
+                                    }
+                                    else if (searchMethod === "bureau") {
+                                        ret = element.bureau.toUpperCase().startsWith(searchValue.toUpperCase())
+                                    }
+                                    else {
+                                        ret = element.noms.toUpperCase().indexOf(searchValue.toUpperCase()) != -1
+                                    }
+                                }
+                                if (ret && typeFilter != "tout") {
+                                    ret = element.type.typeName.toUpperCase() == typeFilter.toUpperCase()
+                                }
+                                if (ret && markFilter != "tout") {
+                                    ret = element.mark.markName.toUpperCase() == markFilter.toUpperCase()
+                                }
+                                return ret
+                            }).map((ip, index) => {
                                 return <tr key={index} className="t-bg-white t-border-b dark:t-bg-gray-800 dark:t-border-gray-700">
                                     <th scope="row" className="t-py-4 t-px-6 t-font-medium t-text-gray-900 t-whitespace-nowrap dark:t-text-white">
                                         {ip.address}
@@ -383,7 +354,7 @@ const ListPage = () => {
                                     <td className="t-py-4 t-px-6 t-text-left">
                                         {ip.noms}
                                     </td>
-                                    <td className="t-py-4 t-px-3 t-text-left t-flex t-space-x-2">
+                                    <td className="t-py-4 t-px-3 t-text-left t-flex t-justify-center t-items-center t-space-x-2">
                                         <div onClick={() => { confirmDelete(ip.idAddress, ip.address) }} className='t-p-1.5 t-rounded-full t-fill-white hover:t-fill-red-500 t-border-2 t-duration-300 t-delay-75 t-border-transparent hover:t-border-red-500 hover:t-bg-white t-bg-red-500 t-cursor-pointer t-w-min'>
                                             <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M7 21q-.825 0-1.412-.587Q5 19.825 5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413Q17.825 21 17 21ZM17 6H7v13h10ZM9 17h2V8H9Zm4 0h2V8h-2ZM7 6v13Z" /></svg>
                                         </div>
@@ -399,7 +370,7 @@ const ListPage = () => {
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </div >
         </div >
     )
 }

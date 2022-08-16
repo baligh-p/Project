@@ -4,6 +4,7 @@ import { UserAtom } from '../SharedStates/SharedUserState'
 import { useRecoilState } from 'recoil'
 import { customAxios } from '../CustomElement/axios'
 import Loader from '../Components/Loader/Loader'
+import Notification from '../Components/Notification/Notification'
 const AuthRouter = () => {
     const [user, setUser] = useRecoilState(UserAtom)
     useEffect(() => {
@@ -38,11 +39,13 @@ const AuthRouter = () => {
                                 getUser()
                             }
                             else {
-                                setUser({ isLogged: false })
+                                setUser({ isLogged: false, id: null, username: null, role: null })
+                                localStorage.clid = ""
                             }
                         })
                     } else {
-                        setUser({ isLogged: false })
+                        setUser({ isLogged: false, id: null, username: null, role: null })
+                        localStorage.clid = ""
                     }
                 }
                 else if (!response.data.success) {
@@ -62,7 +65,7 @@ const AuthRouter = () => {
             </div>
         }
         else {
-            return (<Outlet />)
+            return (<><Notification /><Outlet /></>)
         }
     }
     else return <Navigate to="/Login" />
