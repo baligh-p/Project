@@ -7,7 +7,7 @@ import { useRecoilState } from "recoil"
 import { UserAtom } from '../../SharedStates/SharedUserState'
 import Loader from '../Loader/Loader'
 import Line from './Line'
-import { NotificationAtom } from '../../SharedStates/NotificationAtom'
+import useNotify from "../../CustomElement/UseNotify"
 const ListPage = () => {
     const [searchValue, setSearchValue] = useState("")
 
@@ -27,7 +27,9 @@ const ListPage = () => {
 
     const [addLine, setAddLine] = useState(false)
 
-    const [notification, setNotification] = useRecoilState(NotificationAtom)
+
+    const [typesList, setTypesList] = useState([])
+    const [markList, setMarkList] = useState([])
 
 
     const [user, setUser] = useRecoilState(UserAtom)
@@ -37,6 +39,8 @@ const ListPage = () => {
     const table = useRef(null)
 
     const { direction } = useParams()
+
+    const notify = useNotify()
 
     useEffect(() => {
         setSearchMethod(searchMethodSelect.current.value)
@@ -57,7 +61,7 @@ const ListPage = () => {
                 .then((res) => {
                     setIps(res.data)
                 }).catch((err) => {
-                    console.log(err)
+                    if (err.code !== "ERR_CANCELED") notify("error", "Erreur d'execution de requete")
                 })
         }
 
@@ -95,6 +99,7 @@ const ListPage = () => {
                             }).catch((err) => {
                                 console.log("refresh token")
                                 console.log(err)
+                                if (err.code !== "ERR_CANCELED") notify("error", "Erreur d'execution de requete")
                             })
                         } else {
                             setUser({ isLogged: false, id: null, username: null, role: null })
@@ -110,7 +115,7 @@ const ListPage = () => {
                     }
                 })
                 .catch((err) => {
-                    console.log(err)
+                    if (err.code !== "ERR_CANCELED") notify("error", "Erreur d'execution de requete")
                 })
         }
 
@@ -145,13 +150,10 @@ const ListPage = () => {
             }
             else if (response.data.success == false) {
                 setIsDeleting(false)
-                setNotification({
-                    ...notification,
-                    visible: true,
-                    message: "Adresse IP n'existe pas",
-                    type: "warning"
-                })
+                notify("warning", "Adresse IP n'existe pas")
             }
+        }).catch((err) => {
+            if (err.code !== "ERR_CANCELED") notify("error", "Erreur d'execution de requete")
         })
     }
 
@@ -181,8 +183,7 @@ const ListPage = () => {
                                 localStorage.clid = ""
                             }
                         }).catch((err) => {
-                            console.log("refresh token")
-                            console.log(err)
+                            if (err.code !== "ERR_CANCELED") notify("error", "Erreur d'execution de requete")
                         })
                     } else {
                         setUser({ isLogged: false, id: null, username: null, role: null })
@@ -195,20 +196,157 @@ const ListPage = () => {
                 }
                 else if (response.data.success == false) {
                     setIsDeleting(false)
-                    setNotification({
-                        ...notification,
-                        visible: true,
-                        message: "Adresse IP n'existe pas",
-                        type: "warning"
-                    })
+                    notify("warning", "Adresse IP n'existe pas")
                 }
             })
             .catch((err) => {
-                /*other erros :: Unautorized*/
-                console.log(err)
-
+                if (err.code !== "ERR_CANCELED") notify("error", "Erreur d'execution de requete")
             })
     }
+
+
+    useEffect(() => {
+
+
+        const getTypesRequest = () => {
+            customAxios.get(`/type/getTypes`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.access_tkn}`,
+                },
+            }).then((res) => {
+                if (res.status == 200) {
+                    setTypesList(res.data)
+                }
+                else {
+                    notify("error", "Erreur d'execution de requete")
+                }
+            })
+        }
+
+        const getMarkRequest = () => {
+            customAxios.get(`/mark/getMarks`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.access_tkn}`,
+                },
+            }).then((res) => {
+                if (res.status == 200) {
+                    setMarkList(res.data)
+                }
+                else {
+                    notify("error", "Erreur d'execution de requete")
+                }
+            })
+        }
+
+        customAxios.get(`/type/getTypes`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.access_tkn}`,
+            },
+        })
+            .then((response) => {
+                if (response.data.type && response.data.type == "token") {
+                    if (response.data.error.startsWith("The Token has expired on")) {
+                        customAxios.get("/tkn/refresh", {
+                            headers: {
+                                Authorization: `Bearer ${localStorage.refresh_tkn}`,
+                            },
+                        }).then(async (res) => {
+                            if (res.data.type != "token") {
+                                localStorage.access_tkn = res.data.access_token
+                                localStorage.refresh_tkn = res.data.refresh_token
+                                //fn
+                                getTypesRequest()
+                            }
+                            else {
+                                setUser({ isLogged: false, id: null, username: null, role: null })
+                                localStorage.clid = ""
+                            }
+                        }).catch((err) => {
+                            if (err.code !== "ERR_CANCELED") notify("error", "Erreur d'execution de requete")
+                        })
+                    } else {
+                        setUser({ isLogged: false, id: null, username: null, role: null })
+                        localStorage.clid = ""
+                    }
+                }
+                else if (response.status == 200) {
+                    setTypesList(response.data)
+                }
+                else {
+                    notify("error", "Erreur d'execution de requete")
+                }
+            })
+            .catch((err) => {
+                if (err.code !== "ERR_CANCELED") notify("error", "Erreur d'execution de requete")
+            })
+        customAxios.get(`/mark/getMarks`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.access_tkn}`,
+            },
+        })
+            .then((response) => {
+                if (response.data.type && response.data.type == "token") {
+                    if (response.data.error.startsWith("The Token has expired on")) {
+                        customAxios.get("/tkn/refresh", {
+                            headers: {
+                                Authorization: `Bearer ${localStorage.refresh_tkn}`,
+                            },
+                        }).then(async (res) => {
+                            if (res.data.type != "token") {
+                                localStorage.access_tkn = res.data.access_token
+                                localStorage.refresh_tkn = res.data.refresh_token
+                                //fn
+                                getMarkRequest()
+                            }
+                            else {
+                                setUser({ isLogged: false, id: null, username: null, role: null })
+                                localStorage.clid = ""
+                            }
+                        }).catch((err) => {
+                            if (err.code !== "ERR_CANCELED") notify("error", "Erreur d'execution de requete")
+                        })
+                    } else {
+                        setUser({ isLogged: false, id: null, username: null, role: null })
+                        localStorage.clid = ""
+                    }
+                }
+                else if (response.status == 200) {
+                    setMarkList(response.data)
+                }
+                else {
+                    notify("error", "Erreur d'execution de requete")
+                }
+            })
+            .catch((err) => {
+                if (err.code !== "ERR_CANCELED") notify("error", "Erreur d'execution de requete")
+            })
+    }, [])
+
+
+
+    const ipDisponible = () => {
+        if (ips) {
+            const len = ips.length
+            const firstOctet = ips[0]?.address.split(".")[0]
+            if (firstOctet > 0 && 127 > firstOctet) {
+                return (2 ** 24) - 3 - ips.length
+            }
+            else if (firstOctet > 127 && 200 > firstOctet) {
+                return (2 ** 8) - 3 - ips.length
+            }
+            else {
+                return (2 ** 16) - 3 - ips.length
+            }
+        } else {
+            return ""
+        }
+    }
+
+
+    const generateFirstIp = () => {
+
+    }
+
     const confirmDelete = (id, address) => {
         setSelectedIp({ id, address })
     }
@@ -246,7 +384,7 @@ const ListPage = () => {
                             <img src="/assets/icons/ip.png" className='t-h-20 t-ml-4 t-w-20' />
                         </div>
                         <div className='t-ml-2'>
-                            <p className='t-text-[25px] t-text-white t-font-body t-font-bold'>{ips ? 252 - ips.length : 0}</p>
+                            <p className='t-text-[25px] t-text-white t-font-body t-font-bold'>{ipDisponible()}</p>
                             <p className='t-text-[13px] t-text-white t-font-body'>Adresses IP disponibles</p>
                         </div>
                     </div>
@@ -262,21 +400,23 @@ const ListPage = () => {
                         </select>
                     </div>
 
-                    <div className='lg:t-flex opacityAnimation t-hidden t-flex-col t-ml-auto t-mr-5'>
+                    <div className='md:t-flex opacityAnimation t-hidden t-flex-col t-ml-auto t-mr-5'>
                         <label className='t-text-white t-h-0 t-text-[10px] t-relative t-left-0.5 t-bottom-px'>Type</label>
                         <select defaultValue={"tout"} onChange={(e) => { setTypeFilter(e.target.value) }} className="t-cursor-pointer t-px-1 t-shadow-md t-h-[44px] t-bg-blue-500 t-outline-none t-text-white t-text-[13px] t-w-min t-min-w-[96px] t-text-center t-rounded-sm">
                             <option className='t-bg-white t-text-black t-text-[14px]' value="tout">Tout</option>
-                            <option className='t-bg-white t-text-black t-text-[14px]' value="imprimante">Imprimante</option>
-                            <option className='t-bg-white t-text-black t-text-[14px]' value="pc">PC</option>
+                            {typesList?.map((element, index) => {
+                                return <option key={index} className='t-bg-white t-text-black t-text-[14px]' value={element.typeName}>{element.typeName}</option>
+                            })}
                         </select>
                     </div>
 
-                    <div className='lg:t-flex opacityAnimation t-hidden t-flex-col t-mx-5'>
+                    <div className='md:t-flex opacityAnimation t-hidden t-flex-col t-mx-5'>
                         <label className='t-text-white t-h-0 t-text-[10px] t-relative t-left-0.5 t-bottom-px'>Mark</label>
                         <select className="t-cursor-pointer t-h-[44px] t-px-1 t-bg-blue-500 t-outline-none t-text-white t-text-[13px] lg:t-w-min t-min-w-[96px] t-text-center t-rounded-sm t-shadow-md" defaultValue={"tout"} onChange={(e) => { setMarkFilter(e.target.value) }}>
                             <option className='t-bg-white t-text-black t-text-[14px]' value="tout">Tout</option>
-                            <option className='t-bg-white t-text-black t-text-[14px]' value="asus">Asus</option>
-                            <option className='t-bg-white t-text-black t-text-[14px]' value="hp">HP</option>
+                            {markList?.map((element, index) => {
+                                return <option key={index} className='t-bg-white t-text-black t-text-[14px]' value={element.markName}>{element.markName}</option>
+                            })}
                         </select>
                     </div>
 
@@ -331,9 +471,18 @@ const ListPage = () => {
                                     ret = element.type.typeName.toUpperCase() == typeFilter.toUpperCase()
                                 }
                                 if (ret && markFilter != "tout") {
-                                    ret = element.mark.markName.toUpperCase() == markFilter.toUpperCase()
+                                    ret = element.mark?.markName?.toUpperCase() == markFilter.toUpperCase()
                                 }
                                 return ret
+                            }).sort((a, b) => {
+                                const first = Number(a.address.split(".").join(""))
+                                const second = Number(b.address.split(".").join(""))
+                                if (first > second) {
+                                    return 1
+                                }
+                                else if (first <= second) {
+                                    return -1
+                                }
                             }).map((ip, index) => {
                                 return <tr key={index} className="t-bg-white t-border-b dark:t-bg-gray-800 dark:t-border-gray-700">
                                     <th scope="row" className="t-py-4 t-px-6 t-font-medium t-text-gray-900 t-whitespace-nowrap dark:t-text-white">
@@ -349,10 +498,10 @@ const ListPage = () => {
                                         {ip.type.typeName}
                                     </td>
                                     <td className="t-py-4 t-px-6 t-whitespace-nowrap">
-                                        {ip.mark.markName}
+                                        {ip.mark?.markName ? ip.mark.markName : "______"}
                                     </td>
                                     <td className="t-py-4 t-px-6 t-text-left">
-                                        {ip.noms}
+                                        {ip.noms ? ip.noms : "______"}
                                     </td>
                                     <td className="t-py-4 t-px-3 t-text-left t-flex t-justify-center t-items-center t-space-x-2">
                                         <div onClick={() => { confirmDelete(ip.idAddress, ip.address) }} className='t-p-1.5 t-rounded-full t-fill-white hover:t-fill-red-500 t-border-2 t-duration-300 t-delay-75 t-border-transparent hover:t-border-red-500 hover:t-bg-white t-bg-red-500 t-cursor-pointer t-w-min'>

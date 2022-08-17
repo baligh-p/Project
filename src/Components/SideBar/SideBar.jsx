@@ -41,6 +41,12 @@ const SideBar = () => {
         else if (location.pathname.split("/").filter(element => element != "").find(element => element == "Add_Marks")) {
             document.querySelector(".marks").classList.replace("notSelectedLink", "selectedLink")
         }
+        else if (location.pathname.split("/").filter(element => element != "").find(element => element == "Add_Types")) {
+            document.querySelector(".typesLink").classList?.replace("notSelectedLink", "selectedLink")
+        }
+        else if (location.pathname.split("/").filter(element => element != "").find(element => element == "Add_D")) {
+            document.querySelector(".DirLink").classList?.replace("notSelectedLink", "selectedLink")
+        }
         //Add_User
         else if (location.pathname.split("/").filter(element => element != "").find(element => element == "Add_User")) {
             document.querySelector(".addUser").classList?.replace("notSelectedLink", "selectedLink")
@@ -106,9 +112,19 @@ const SideBar = () => {
                         </svg>
                         <h3 className='t-ml-3 t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>Historique</h3>
                     </Link>
+                    <Link onClick={closeSideBar} to="/Add_Types" className='typesLink t-select-none t-text-body hover:t-ml-1 t-cursor-pointer t-w-full t-px-2  t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M11.25 18.75v-6h-6v-1.5h6v-6h1.5v6h6v1.5h-6v6Z" /></svg>
+                        <h3 className='t-ml-3 t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>Ajouter une Type</h3>
+                    </Link>
                     <Link onClick={closeSideBar} to="/Add_Marks" className='marks t-select-none t-text-body hover:t-ml-1 t-cursor-pointer t-w-full t-px-2  t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
                         <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M11.25 18.75v-6h-6v-1.5h6v-6h1.5v6h6v1.5h-6v6Z" /></svg>
-                        <h3 className='t-ml-3 t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>Ajouter une marque</h3>
+                        <h3 className='t-ml-3 t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>Ajouter une Marque</h3>
+                    </Link>
+                    <Link onClick={closeSideBar} to="/Add_D" className='DirLink t-select-none t-text-body hover:t-ml-1 t-cursor-pointer t-w-full t-px-2  t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
+                            <path d="M3.25 20.575v-13.5h4v-4h9.5v8h4v9.5h-7.5v-4h-2.5v4Zm1.5-1.5h2.5v-2.5h-2.5Zm0-4h2.5v-2.5h-2.5Zm0-4h2.5v-2.5h-2.5Zm4 4h2.5v-2.5h-2.5Zm0-4h2.5v-2.5h-2.5Zm0-4h2.5v-2.5h-2.5Zm4 8h2.5v-2.5h-2.5Zm0-4h2.5v-2.5h-2.5Zm0-4h2.5v-2.5h-2.5Zm4 12h2.5v-2.5h-2.5Zm0-4h2.5v-2.5h-2.5Z" />
+                        </svg>
+                        <h3 className='t-ml-3 t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>Ajouter une Direction</h3>
                     </Link>
                     {user?.role == "ROLE_ADMIN" && <Link onClick={closeSideBar} to="/Add_User" className='addUser t-select-none t-text-body hover:t-ml-1 t-cursor-pointer t-w-full t-px-2  t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
                         <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
@@ -130,7 +146,7 @@ const SideBar = () => {
                     </div>
                 </div>
                 <div className={`customScrollBar t-w-full lg:t-h-[75vh] t-h-[82vh] t-flex-none t-flex t-whitespace-nowrap t-duration-300 t-delay-75 t-overflow-x-hidden t-overflow-y-scroll t-flex-col t-items-start`}>
-                    {directions.map((element, index) => {
+                    {directions?.map((element, index) => {
                         return <Link onClick={closeSideBar} key={index} to={element} className={`${element} t-select-none hover:t-relative t-text-body t-cursor-pointer  t-w-[98%] t-px-2  t-rounded-md t-py-2 t-mx-auto t-flex t-items-center`}>
                             <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
                                 <path d="M3.25 20.575v-13.5h4v-4h9.5v8h4v9.5h-7.5v-4h-2.5v4Zm1.5-1.5h2.5v-2.5h-2.5Zm0-4h2.5v-2.5h-2.5Zm0-4h2.5v-2.5h-2.5Zm4 4h2.5v-2.5h-2.5Zm0-4h2.5v-2.5h-2.5Zm0-4h2.5v-2.5h-2.5Zm4 8h2.5v-2.5h-2.5Zm0-4h2.5v-2.5h-2.5Zm0-4h2.5v-2.5h-2.5Zm4 12h2.5v-2.5h-2.5Zm0-4h2.5v-2.5h-2.5Z" />

@@ -2,7 +2,7 @@ import { atom } from "recoil"
 
 export const UserAtom = atom({
     default: {
-        isLogged: localStorage.access_tkn ? true : false,
+        isLogged: localStorage.clid ? true : false,
         id: localStorage.clid ? localStorage.clid : null,
         role: null,
         username: null

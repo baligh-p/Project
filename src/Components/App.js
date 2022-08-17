@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import { Route, Routes, BrowserRouter } from "react-router-dom"
 
 import AuthRouter from "../CustomRoutes/AuthRouter";
@@ -14,14 +13,16 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<AuthRouter />}>
-          <Route index element={<SideBar />}></Route>
+          <Route index element={<ListPage />}></Route>
           <Route path="IP_List" element={<ListPage />}>
             <Route path=":direction" element={<div></div>} />
           </Route>
           <Route path="History" element={<SideBar />}></Route>
           <Route path="MyProfile" element={<SideBar />}></Route>
           <Route path="Add_Marks" element={<SideBar />} ></Route>
+          <Route path="Add_Types" element={<SideBar />} ></Route>
           <Route path="Add_User" element={<SideBar />} ></Route>
+          <Route path="Add_D" element={<SideBar />} ></Route>
         </Route>
 
         <Route path="/Login" element={<NotLoggedRouter />}>

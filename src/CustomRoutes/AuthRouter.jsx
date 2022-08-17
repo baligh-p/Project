@@ -5,8 +5,13 @@ import { useRecoilState } from 'recoil'
 import { customAxios } from '../CustomElement/axios'
 import Loader from '../Components/Loader/Loader'
 import Notification from '../Components/Notification/Notification'
+import UseNotify from "../CustomElement/UseNotify"
 const AuthRouter = () => {
     const [user, setUser] = useRecoilState(UserAtom)
+
+
+    const notify = UseNotify()
+
     useEffect(() => {
         if (user.isLogged) {
             const url = !localStorage.clid ? `/user/getUserByName/${user.username}` : `/user/getUser/${localStorage.clid}`
@@ -18,6 +23,8 @@ const AuthRouter = () => {
                 }).then((res) => {
                     setUser({ ...user, id: res.data.id, username: res.data.username, role: res.data.role })
                     localStorage.clid = res.data.id
+                }).catch((err) => {
+                    if (err.code !== "ERR_CANCELED") notify("error", "Erreur d'execution de requete")
                 })
             }
 
@@ -42,6 +49,8 @@ const AuthRouter = () => {
                                 setUser({ isLogged: false, id: null, username: null, role: null })
                                 localStorage.clid = ""
                             }
+                        }).catch((err) => {
+                            if (err.code !== "ERR_CANCELED") notify("error", "Erreur d'execution de requete")
                         })
                     } else {
                         setUser({ isLogged: false, id: null, username: null, role: null })
@@ -53,7 +62,7 @@ const AuthRouter = () => {
                 }
             })
                 .catch((err) => {
-                    /*other erros :: Unautorized*/
+                    if (err.code !== "ERR_CANCELED") notify("error", "Erreur d'execution de requete")
                 })
         }
     }, [])

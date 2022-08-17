@@ -4,14 +4,15 @@ import { UserAtom } from '../../SharedStates/SharedUserState'
 import { useRecoilState } from 'recoil'
 import Loader from '../Loader/Loader'
 import { useParams } from 'react-router-dom'
-import { NotificationAtom } from '../../SharedStates/NotificationAtom'
+import useNotify from '../../CustomElement/UseNotify'
 
 const Line = React.memo(({ display, removeLigne, setFirstGet, firstGet }) => {
 
     const [user, setUser] = useRecoilState(UserAtom)
-    const [notification, setNotification] = useRecoilState(NotificationAtom)
 
     const [isLoading, setIsLoading] = useState(false)
+    const [typesList, setTypesList] = useState([])
+    const [selectedType, setSelectedType] = useState(null)
 
     const address = useRef(null)
     const bureau = useRef(null)
@@ -21,6 +22,8 @@ const Line = React.memo(({ display, removeLigne, setFirstGet, firstGet }) => {
 
     const { direction } = useParams()
 
+    const notify = useNotify()
+
     const addIp = (data) => {
         customAxios.post("/ip/addIP", data, {
             headers: {
@@ -29,19 +32,13 @@ const Line = React.memo(({ display, removeLigne, setFirstGet, firstGet }) => {
             }
         }).then((response) => {
             if (response.data.exist == false) {
-                /*success*/
+                notify("success", "Adresse IP est Ajouté avec succé")
                 setIsLoading(false)
                 setFirstGet()
             }
             else if (response.data.exist == true) {
-                //error message with notification
                 setIsLoading(false)
-                setNotification({
-                    ...notification,
-                    visible: true,
-                    message: "Adresse IP deja exist",
-                    type: "warning"
-                })
+                notify("warning", "Adresse IP est deja exist")
             }
         })
     }
@@ -74,8 +71,7 @@ const Line = React.memo(({ display, removeLigne, setFirstGet, firstGet }) => {
                                 localStorage.clid = ""
                             }
                         }).catch((err) => {
-                            console.log("refresh token")
-                            console.log(err)
+                            if (err.code !== "ERR_CANCELED") notify("error", "Erreur d'execution de requete")
                         })
                     } else {
                         setIsLoading(false)
@@ -84,47 +80,47 @@ const Line = React.memo(({ display, removeLigne, setFirstGet, firstGet }) => {
                     }
                 }
                 else if (response.data.exist == false) {
+                    notify("success", "Adresse IP est Ajouté avec succé")
                     setIsLoading(false)
                     setFirstGet()
                 }
                 else if (response.data.exist == true) {
                     setIsLoading(false)
-                    setNotification({
-                        ...notification,
-                        visible: true,
-                        message: "Adresse IP deja exist",
-                        type: "warning"
-                    })
-
+                    notify("warning", "Adresse IP est deja exist")
                 }
             })
             .catch((err) => {
                 /*other erros :: Unautorized*/
-                console.log(err)
+                if (err.code !== "ERR_CANCELED") notify("error", "Erreur d'execution de requete")
                 setIsLoading(false)
-
             })
     }
 
 
     const handleSubmitAdd = () => {
         var submit = true
-        if (Array.from(address.current.value).filter((element) => element == ".").length != 3) {
+        const reg = /[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+/
+        if (address.current.value.match(reg) && address.current.value.match(reg)[0] == address.current.value.match(reg).input) {
+        }
+        else {
             submit = false
             address.current.classList.add("errorClass")
+            notify("warning", "Adresse IP est Invalide")
         }
-
-
-
+        if (submit && !bureau.current.value.length) {
+            submit = false
+            notify("warning", "Le champ BUREAU est Obligatoire")
+        }
         if (submit) {
             const data = JSON.stringify({
                 address: address.current.value,
                 bureau: bureau.current.value,
                 direction: direction,
                 noms: noms.current.value,
-                idType: "2",
-                idMark: "3"
+                idType: type.current.value,
+                idMark: mark.current.value == "none" ? null : mark.current.value,
             })
+
             addLigne(data)
         }
     }
@@ -134,17 +130,80 @@ const Line = React.memo(({ display, removeLigne, setFirstGet, firstGet }) => {
         if (!display) {
             address.current.value = ""
             bureau.current.value = ""
-            type.current.value = "tout"
-            mark.current.value = "tout"
+            mark.current.value = "none"
             noms.current.value = ""
         }
     }, [display])
+
+
 
     useEffect(() => {
         if (!firstGet) {
             removeLigne()
         }
     }, [firstGet])
+
+
+    useEffect(() => {
+        const getTypesRequest = () => {
+            customAxios.get(`/type/getTypes`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.access_tkn}`,
+                },
+            }).then((res) => {
+                if (res.status == 200) {
+                    setTypesList(res.data)
+                    setSelectedType(res.data[0])
+                }
+                else {
+                    notify("error", "Erreur d'execution de requete")
+                }
+            })
+        }
+
+        customAxios.get(`/type/getTypes`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.access_tkn}`,
+            },
+        })
+            .then((response) => {
+                if (response.data.type && response.data.type == "token") {
+                    if (response.data.error.startsWith("The Token has expired on")) {
+                        customAxios.get("/tkn/refresh", {
+                            headers: {
+                                Authorization: `Bearer ${localStorage.refresh_tkn}`,
+                            },
+                        }).then(async (res) => {
+                            if (res.data.type != "token") {
+                                localStorage.access_tkn = res.data.access_token
+                                localStorage.refresh_tkn = res.data.refresh_token
+                                //fn
+                                getTypesRequest()
+                            }
+                            else {
+                                setUser({ isLogged: false, id: null, username: null, role: null })
+                                localStorage.clid = ""
+                            }
+                        }).catch((err) => {
+                            if (err.code !== "ERR_CANCELED") notify("error", "Erreur d'execution de requete")
+                        })
+                    } else {
+                        setUser({ isLogged: false, id: null, username: null, role: null })
+                        localStorage.clid = ""
+                    }
+                }
+                else if (response.status == 200) {
+                    setTypesList(response.data)
+                    setSelectedType(response.data[0])
+                }
+                else {
+                    notify("error", "Erreur d'execution de requete")
+                }
+            })
+            .catch((err) => {
+                if (err.code !== "ERR_CANCELED") notify("error", "Erreur d'execution de requete")
+            })
+    }, [])
 
     return (
         <tr style={{ display: display ? "" : "none" }} className="t-bg-white t-border t-text-black dark:t-bg-gray-800 t-border-blue-400">
@@ -158,19 +217,20 @@ const Line = React.memo(({ display, removeLigne, setFirstGet, firstGet }) => {
                 <input placeholder='Direction' disabled={true} defaultValue={direction} type="text" className='t-h-full t-border-r t-border-blue-400 t-w-full t-outline-none t-p-1.5 t-box-border t-text-center' />
             </td>
             <td className="t-h-[70px] t-m-0 t-p-0">
-                <select ref={type} defaultValue={"tout"} className="t-cursor-pointer t-h-full t-bg-white t-outline-none t-border-r t-border-blue-400 t-text-blue-500
+                <select ref={type} onChange={() => { setSelectedType(() => typesList.filter((element) => element.idType == type.current.value)[0]) }} defaultValue={typesList.length ? typesList[0].idType : ""} className="t-cursor-pointer t-h-full t-bg-white t-outline-none t-border-r t-border-blue-400 t-text-blue-500
                                     t-text-[13px] t-w-full t-text-center">
-                    <option className='t-bg-white t-text-blue-500 t-text-[14px]' value="tout">Tout</option>
-                    <option className='t-bg-white t-text-blue-500 t-text-[14px]' value="2">Imprimante</option>
-                    <option className='t-bg-white t-text-blue-500 t-text-[14px]' value="3">PC</option>
+                    {typesList?.map((element, index) => {
+                        return <option key={index} className='t-bg-white t-text-blue-500 t-text-[14px]' value={element.idType}>{element.typeName}</option>
+                    })}
                 </select>
             </td>
             <td className="t-h-[70px] t-m-0 t-p-0">
                 <select ref={mark} className="t-cursor-pointer t-h-full t-bg-white t-outline-none t-border-r t-border-blue-400 t-text-blue-500
-                                    t-text-[13px] t-w-full t-text-center" defaultValue={"tout"}>
-                    <option className='t-bg-white t-text-blue-500 t-text-[14px]' value="tout">Tout</option>
-                    <option className='t-bg-white t-text-blue-500 t-text-[14px]' value="2">Asus</option>
-                    <option className='t-bg-white t-text-blue-500t-text-[14px]' value="3">HP</option>
+                                    t-text-[13px] t-w-full t-text-center" defaultValue={selectedType ? selectedType.marks[0].idMark : "none"}>
+                    <option className='t-bg-white t-text-blue-500 t-text-[14px]' value="none">none</option>
+                    {selectedType?.marks.map((element, index) => {
+                        return <option key={index} className='t-bg-white t-text-blue-500 t-text-[14px]' value={element.idMark}>{element.markName}</option>
+                    })}
                 </select>
             </td>
             <td className="t-h-[70px] t-m-0 t-p-0 t-flex t-justify-start t-items-start ">
@@ -186,7 +246,7 @@ const Line = React.memo(({ display, removeLigne, setFirstGet, firstGet }) => {
                         </div></>) || (<Loader height="35px" size="35px" border="3px" color="#4ade80" />)}
                 </div>
             </td>
-        </tr>
+        </tr >
     )
 })
 
