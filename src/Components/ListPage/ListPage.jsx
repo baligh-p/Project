@@ -8,6 +8,7 @@ import { UserAtom } from '../../SharedStates/SharedUserState'
 import Loader from '../Loader/Loader'
 import Line from './Line'
 import useNotify from "../../CustomElement/UseNotify"
+import UpdateLine from './UpdateLine'
 const ListPage = () => {
     const [searchValue, setSearchValue] = useState("")
 
@@ -26,6 +27,8 @@ const ListPage = () => {
     const [firstGet, setFirstGet] = useState(false)
 
     const [addLine, setAddLine] = useState(false)
+
+    const [selectedUpdateLine, setSelectedUpdateLine] = useState(null)
 
 
     const [typesList, setTypesList] = useState([])
@@ -323,7 +326,6 @@ const ListPage = () => {
     }, [])
 
 
-
     const ipDisponible = () => {
         if (ips) {
             const len = ips.length
@@ -331,11 +333,14 @@ const ListPage = () => {
             if (firstOctet > 0 && 127 > firstOctet) {
                 return (2 ** 24) - 3 - ips.length
             }
-            else if (firstOctet > 127 && 200 > firstOctet) {
+            else if (firstOctet > 127 && 192 > firstOctet) {
+                return (2 ** 16) - 3 - ips.length
+            }
+            else if (firstOctet > 191 && firstOctet < 224) {
                 return (2 ** 8) - 3 - ips.length
             }
             else {
-                return (2 ** 16) - 3 - ips.length
+                return ""
             }
         } else {
             return ""
@@ -344,11 +349,150 @@ const ListPage = () => {
 
 
     const generateFirstIp = () => {
+        if (ips && ips[0]) {
+            const firstOctet = ips[0]?.address.split(".")[0]
+            var address = ""
+            var sortedTable = ips.slice().sort((a, b) => {
+                const first = Number(a.address.split(".").join(""))
+                const second = Number(b.address.split(".").join(""))
+                if (first > second) {
+                    return 1
+                }
+                else if (first <= second) {
+                    return -1
+                }
+            })
+            if (firstOctet > 0 && 127 > firstOctet) {
+                if (sortedTable.length == (2 ** 24) - 3) {
+                    return "max"
+                }
+                else if (sortedTable.length) {
+                    address = sortedTable[0].address.split(".")[0]
+                    var octet2;
+                    var octet3;
+                    for (var index = 0; index < 256; index++) {
+                        if (octet3 == undefined) {
+                            var filtredTable = sortedTable.filter((element) => element.address.split(".")[1] == index)
+                            octet2 = index
+                            for (var index2 = 0; index2 < 256; index2++) {
+                                var secondfiltredTable = filtredTable.filter((element) => element.address.split(".")[2] == index2)
+                                if (secondfiltredTable.length != 253) {
+                                    octet3 = index2
+                                    break;
+                                }
+                            }
+                        }
+                        else {
+                            break;
+                        }
+                    }
+                    const tableWithSelectedOctet = sortedTable.filter((element) => element.address.split(".")[2] == octet3 && element.address.split(".")[1] == octet2)
+                    for (var index = 0; index < tableWithSelectedOctet.length; index++) {
+                        const element = Number(tableWithSelectedOctet[index].address.split(".")[3])
 
+                        if (octet3 == 0 && octet2 == 0) {
+                            if (element != index + 2) {
+                                return address + "." + octet2 + "." + octet3 + "." + (index + 2)
+                            }
+                        }
+                        else {
+                            if (element != index) {
+                                return address + "." + octet2 + "." + octet3 + "." + (index)
+                            }
+                        }
+                    }
+                    if (octet3 || octet2) {
+                        return address + "." + octet2 + "." + octet3 + "." + (tableWithSelectedOctet.length)
+                    }
+                    else {
+                        return address + "." + octet2 + "." + octet3 + "." + (tableWithSelectedOctet.length + 2)
+                    }
+
+                }
+                else {
+                    return null
+                }
+            }
+            else if (firstOctet > 127 && 192 > firstOctet) {
+                if (sortedTable.length == (2 ** 16) - 3) {
+                    return "max"
+                }
+                else if (sortedTable.length) {
+                    address = sortedTable[0].address.substring(0, sortedTable[0].address.indexOf(".", sortedTable[0].address.indexOf(".") + 1) + 1)
+                    var octet3;
+                    for (var index = 0; index < 256; index++) {
+                        var filtredTable = sortedTable.filter((element) => element.address.split(".")[2] == index)
+                        if (filtredTable.length != 253) {
+                            octet3 = index
+                            break;
+                        }
+                    }
+                    const tableWithSelectedOctet = sortedTable.filter((element) => element.address.split(".")[2] == octet3)
+                    for (var index = 0; index < tableWithSelectedOctet.length; index++) {
+                        const element = Number(tableWithSelectedOctet[index].address.split(".")[3])
+                        if (octet3 == 0) {
+                            if (element != index + 2) {
+                                return address + octet3 + "." + (index + 2)
+                            }
+                        }
+                        else {
+                            if (element != index) {
+                                return address + octet3 + "." + (index)
+                            }
+                        }
+                    }
+                    if (octet3) {
+                        return address + octet3 + "." + (tableWithSelectedOctet.length)
+                    }
+                    else {
+                        return address + octet3 + "." + (tableWithSelectedOctet.length + 2)
+                    }
+                }
+                else {
+                    return null
+                }
+            }
+            else if (firstOctet > 191 && firstOctet < 224) {
+                if (sortedTable.length == 253) {
+                    return "max"
+                }
+                else if (sortedTable.length) {
+                    address = sortedTable[0].address.substring(0, sortedTable[0].address.lastIndexOf(".") + 1)
+                    for (var index = 0; index < sortedTable.length; index++) {
+                        const element = Number(sortedTable[index].address.split(".")[3])
+                        if (element != index + 2) {
+                            return address + (index + 2)
+                        }
+                    }
+                    return address + (sortedTable.length + 2)
+                }
+                else {
+                    return null
+                }
+            }
+        }
+        else {
+            return null
+        }
+        return address
     }
 
     const confirmDelete = (id, address) => {
         setSelectedIp({ id, address })
+    }
+
+
+    const updateOpacity = (id) => {
+        if (selectedUpdateLine) {
+            if (selectedUpdateLine.idAddress == id) {
+                return { opacity: 1 }
+            }
+            else {
+                return { opacity: 0.3 }
+            }
+        } else {
+            return { opacity: 1 }
+        }
     }
     return (
         <div className='t-flex t-font-body t-items-start t-h-full'>
@@ -383,8 +527,8 @@ const ListPage = () => {
                         <div className=' t-flex-none'>
                             <img src="/assets/icons/ip.png" className='t-h-20 t-ml-4 t-w-20' />
                         </div>
-                        <div className='t-ml-2'>
-                            <p className='t-text-[25px] t-text-white t-font-body t-font-bold'>{ipDisponible()}</p>
+                        <div className='t-ml-2 t-overflow-hidden'>
+                            <p className='t-text-[25px] t-text-white t-font-body t-font-bold t-break-words'>{ipDisponible()}</p>
                             <p className='t-text-[13px] t-text-white t-font-body'>Adresses IP disponibles</p>
                         </div>
                     </div>
@@ -453,7 +597,7 @@ const ListPage = () => {
                             </tr>
                         </thead>
                         <tbody ref={table}>
-                            <Line display={addLine} firstGet={firstGet} setFirstGet={() => { setFirstGet(true) }} removeLigne={() => { setAddLine(false) }} />
+                            <Line firstIp={generateFirstIp()} display={addLine} firstGet={firstGet} setFirstGet={() => { setFirstGet(true) }} removeLigne={() => { setAddLine(false) }} />
                             {ips?.filter((element) => {
                                 var ret = true
                                 if (searchValue) {
@@ -484,7 +628,10 @@ const ListPage = () => {
                                     return -1
                                 }
                             }).map((ip, index) => {
-                                return <tr key={index} className="t-bg-white t-border-b dark:t-bg-gray-800 dark:t-border-gray-700">
+                                if (selectedUpdateLine?.idAddress == ip.idAddress) {
+                                    return <UpdateLine key={ip.idAddress} data={ip} display={selectedUpdateLine} firstGet={firstGet} setFirstGet={() => { setFirstGet(true) }} removeLigne={() => { setSelectedUpdateLine(null) }} />
+                                }
+                                else return <tr key={index} style={updateOpacity(ip.idAddress)} className="t-bg-white t-border-b dark:t-bg-gray-800 dark:t-border-gray-700">
                                     <th scope="row" className="t-py-4 t-px-6 t-font-medium t-text-gray-900 t-whitespace-nowrap dark:t-text-white">
                                         {ip.address}
                                     </th>
@@ -507,7 +654,7 @@ const ListPage = () => {
                                         <div onClick={() => { confirmDelete(ip.idAddress, ip.address) }} className='t-p-1.5 t-rounded-full t-fill-white hover:t-fill-red-500 t-border-2 t-duration-300 t-delay-75 t-border-transparent hover:t-border-red-500 hover:t-bg-white t-bg-red-500 t-cursor-pointer t-w-min'>
                                             <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M7 21q-.825 0-1.412-.587Q5 19.825 5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413Q17.825 21 17 21ZM17 6H7v13h10ZM9 17h2V8H9Zm4 0h2V8h-2ZM7 6v13Z" /></svg>
                                         </div>
-                                        <div className='t-p-1.5 t-rounded-full t-fill-white hover:t-fill-blue-500 t-border-2 t-duration-300 t-delay-75 t-border-transparent hover:t-border-blue-500 hover:t-bg-white t-bg-blue-500 t-cursor-pointer t-w-min'>
+                                        <div onClick={() => { setSelectedUpdateLine(ip) }} className='t-p-1.5 t-rounded-full t-fill-white hover:t-fill-blue-500 t-border-2 t-duration-300 t-delay-75 t-border-transparent hover:t-border-blue-500 hover:t-bg-white t-bg-blue-500 t-cursor-pointer t-w-min'>
                                             <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
                                                 <path d="M5 19h1.4l8.625-8.625-1.4-1.4L5 17.6ZM19.3 8.925l-4.25-4.2 1.4-1.4q.575-.575 1.413-.575.837 0 1.412.575l1.4 1.4q.575.575.6 1.388.025.812-.55 1.387ZM17.85 10.4 7.25 21H3v-4.25l10.6-10.6Zm-3.525-.725-.7-.7 1.4 1.4Z" />
                                             </svg>
