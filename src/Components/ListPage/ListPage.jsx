@@ -495,8 +495,7 @@ const ListPage = () => {
         }
     }
     return (
-        <div className='t-flex t-font-body t-items-start t-h-full'>
-            <SideBar />
+        <>
             {(selectedIp.id) && <div className='t-fixed t-top-0 t-left-0 t-z-50 t-h-screen t-w-full t-bg-neutral-900/20 t-flex t-items-center t-justify-center'>
                 <div className='t-bg-white t-box-content t-shadow-lg t-shadow-neutral-300 t-h-[290px] md:t-w-[450px] t-w-10/12 t-rounded-md t-p-5'>
                     <div onClick={() => { if (!isDeleting && !firstGet) setSelectedIp({}); if (isDeleting === false && !firstGet) setIsDeleting(null) }} className='t-ml-auto t-relative t-bottom-4 t-left-4 t-p-0.5 hover:t-bg-stone-300 t-rounded-full t-cursor-pointer t-fill-[#002e67]/75 t-w-min' >
@@ -667,7 +666,7 @@ const ListPage = () => {
                     </table>
                 </div>
             </div >
-        </div >
+        </>
     )
 }
 

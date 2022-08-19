@@ -6,28 +6,31 @@ import NotLoggedRouter from "../CustomRoutes/NotLoggedRouter";
 import ListPage from "./ListPage/ListPage";
 import SideBar from "./SideBar/SideBar";
 import LoginPage from "./LoginPage/LoginPage";
+import AddUser from "./AddUser/AddUser";
 
 const App = () => {
 
   return (
     <BrowserRouter>
       <Routes>
+
         <Route path="/" element={<AuthRouter />}>
-          <Route index element={<ListPage />}></Route>
-          <Route path="IP_List" element={<ListPage />}>
-            <Route path=":direction" element={<div></div>} />
+          <Route path="" element={<SideBar />}>
+            <Route path="IP_List/:direction" element={<ListPage />} />
+            <Route path="History" element={<div>History</div>}></Route>
+            <Route path="MyProfile" element={<div>MyProfile</div>}></Route>
+            <Route path="Add_Marks" element={<div>marks</div>} ></Route>
+            <Route path="Add_Types" element={<div>types</div>} ></Route>
+            <Route path="Add_User" element={<AddUser />} ></Route>
+            <Route path="Add_D" element={<div>direction</div>} ></Route>
           </Route>
-          <Route path="History" element={<SideBar />}></Route>
-          <Route path="MyProfile" element={<SideBar />}></Route>
-          <Route path="Add_Marks" element={<SideBar />} ></Route>
-          <Route path="Add_Types" element={<SideBar />} ></Route>
-          <Route path="Add_User" element={<SideBar />} ></Route>
-          <Route path="Add_D" element={<SideBar />} ></Route>
         </Route>
 
         <Route path="/Login" element={<NotLoggedRouter />}>
           <Route path="" element={<LoginPage />}></Route>
         </Route>
+
+        <Route path="*" element={<div>error page</div>} />
 
       </Routes >
     </BrowserRouter >

@@ -18,11 +18,6 @@
     opacity: 1;
   }
 }
-.linksContainer {
-  .deconnecter {
-    margin-top: 8px;
-  }
-}
 .customScrollBar {
   &::-webkit-scrollbar {
     width: 5px;
@@ -48,12 +43,12 @@
   color: white;
   fill: white;
   background-color: rgb(82, 82, 82, 0.8);
-  margin-bottom: 8px;
-  margin-top: 8px;
+  margin-bottom: 6px;
+  margin-top: 6px;
 }
 .notSelectedLink {
-  margin-bottom: 8px;
-  margin-top: 8px;
+  margin-bottom: 6px;
+  margin-top: 6px;
   color: rgb(168, 162, 158);
   fill: rgb(168, 162, 158);
 }
@@ -121,10 +116,15 @@
   }
 }
 
-.tableIp {
-  max-height: calc(100vh - 220px);
-  animation-name: tabAnimation;
-  animation-duration: 0.5s;
+@media screen and (min-width: 1024px) {
+  .tableIp {
+    max-height: calc(100vh - 220px);
+    animation-name: tabAnimation;
+    animation-duration: 0.5s;
+  }
+  .addUserTable {
+    max-height: calc(100vh - 170px);
+  }
 }
 
 .filterHeight {
