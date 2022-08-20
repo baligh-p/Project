@@ -7,6 +7,7 @@ import ListPage from "./ListPage/ListPage";
 import SideBar from "./SideBar/SideBar";
 import LoginPage from "./LoginPage/LoginPage";
 import AddUser from "./AddUser/AddUser";
+import AddType from "./AddType/AddType";
 
 const App = () => {
 
@@ -19,10 +20,8 @@ const App = () => {
             <Route path="IP_List/:direction" element={<ListPage />} />
             <Route path="History" element={<div>History</div>}></Route>
             <Route path="MyProfile" element={<div>MyProfile</div>}></Route>
-            <Route path="Add_Marks" element={<div>marks</div>} ></Route>
-            <Route path="Add_Types" element={<div>types</div>} ></Route>
+            <Route path="Add_Attributes" element={<AddType />} ></Route>
             <Route path="Add_User" element={<AddUser />} ></Route>
-            <Route path="Add_D" element={<div>direction</div>} ></Route>
           </Route>
         </Route>
 

@@ -100,7 +100,6 @@ const ListPage = () => {
                                     localStorage.clid = ""
                                 }
                             }).catch((err) => {
-                                console.log("refresh token")
                                 console.log(err)
                                 if (err.code !== "ERR_CANCELED") notify("error", "Erreur d'execution de requete")
                             })

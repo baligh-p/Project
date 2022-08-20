@@ -238,7 +238,7 @@ const Line = React.memo(({ firstIp, display, removeLigne, setFirstGet, firstGet 
             </td>
             <td className="t-h-[70px] t-m-0 t-p-0">
                 <select ref={mark} className="t-cursor-pointer t-h-full t-bg-white t-outline-none t-border-r t-border-blue-400 t-text-blue-500
-                                    t-text-[13px] t-w-full t-text-center" defaultValue={selectedType ? selectedType.marks[0].idMark : "none"}>
+                                    t-text-[13px] t-w-full t-text-center" defaultValue={selectedType ? selectedType?.marks[0]?.idMark : "none"}>
                     <option className='t-bg-white t-text-blue-500 t-text-[14px]' value="none">none</option>
                     {selectedType?.marks.map((element, index) => {
                         return <option key={index} className='t-bg-white t-text-blue-500 t-text-[14px]' value={element.idMark}>{element.markName}</option>
