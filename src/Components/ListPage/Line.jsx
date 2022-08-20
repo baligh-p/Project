@@ -25,7 +25,7 @@ const Line = React.memo(({ firstIp, display, removeLigne, setFirstGet, firstGet 
     const notify = useNotify()
 
     const addIp = (data) => {
-        customAxios.post("/ip/addIP", data, {
+        customAxios.post(`/ip/addIP/${localStorage.clid}`, data, {
             headers: {
                 Authorization: `Bearer ${localStorage.access_tkn}`,
                 'Content-Type': "application/json"
@@ -46,7 +46,7 @@ const Line = React.memo(({ firstIp, display, removeLigne, setFirstGet, firstGet 
     const addLigne = (data) => {
 
         setIsLoading(true)
-        customAxios.post("/ip/addIP", data, {
+        customAxios.post(`/ip/addIP/${localStorage.clid}`, data, {
             headers: {
                 Authorization: `Bearer ${localStorage.access_tkn}`,
                 'Content-Type': "application/json"

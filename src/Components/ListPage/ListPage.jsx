@@ -141,7 +141,7 @@ const ListPage = () => {
 
 
     const deleteRequest = (id) => {
-        customAxios.delete(`/ip/deleteIP/${id}`, {
+        customAxios.delete(`/ip/deleteIP/${localStorage.clid}/${id}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.access_tkn}`,
             },
@@ -161,7 +161,7 @@ const ListPage = () => {
 
     const deleteIp = (id) => {
         setIsDeleting(true)
-        customAxios.delete(`/ip/deleteIP/${id}`, {
+        customAxios.delete(`/ip/deleteIP/${localStorage.clid}/${id}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.access_tkn}`,
             },
@@ -330,10 +330,10 @@ const ListPage = () => {
             const len = ips.length
             const firstOctet = ips[0]?.address.split(".")[0]
             if (firstOctet > 0 && 127 > firstOctet) {
-                return (2 ** 24) - 3 - ips.length
+                return (2 ** 24) - 3 - ips.length > 1000 ? "+1000" : (2 ** 24) - 3 - ips.length
             }
             else if (firstOctet > 127 && 192 > firstOctet) {
-                return (2 ** 16) - 3 - ips.length
+                return (2 ** 16) - 3 - ips.length > 1000 ? "+1000" : (2 ** 24) - 3 - ips.length
             }
             else if (firstOctet > 191 && firstOctet < 224) {
                 return (2 ** 8) - 3 - ips.length
@@ -520,7 +520,7 @@ const ListPage = () => {
                 </div>
             </div>}
             <div className='lg:t-w-[79.5%] t-w-full t-h-full t-ml-auto t-relative lg:t-top-[10px] t-top-[5rem]'>
-                <div className='t-w-10/12 t-mx-auto t-mb-5 t-hidden lg:t-flex'>
+                <div className='t-w-10/12 t-mx-auto t-mb-5 t-hidden lg:t-flex t-space-x-9'>
                     <div className='wdj  t-bg-indigo-500 t-flex t-items-center t-justify-center t-h-28 t-shadow-lg t-shadow-neutral-300 t-rounded-md t-w-52'>
                         <div className=' t-flex-none'>
                             <img src="/assets/icons/ip.png" className='t-h-20 t-ml-4 t-w-20' />
@@ -531,6 +531,7 @@ const ListPage = () => {
                         </div>
                     </div>
                 </div>
+
                 <div className='t-mx-auto t-flex t-items-center lg:t-w-10/12 t-w-[96%] t-mb-5'>
                     <div className='t-flex opacityAnimation t-items-center'>
                         <input onInput={(e) => { setSearchValue(() => e.target.value) }} className='t-border-2 t-border-r-0 t-rounded-l-sm t-border-blue-500 focus:t-outline-none 

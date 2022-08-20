@@ -8,6 +8,7 @@ import SideBar from "./SideBar/SideBar";
 import LoginPage from "./LoginPage/LoginPage";
 import AddUser from "./AddUser/AddUser";
 import AddType from "./AddType/AddType";
+import History from "./History/History";
 
 const App = () => {
 
@@ -18,7 +19,7 @@ const App = () => {
         <Route path="/" element={<AuthRouter />}>
           <Route path="" element={<SideBar />}>
             <Route path="IP_List/:direction" element={<ListPage />} />
-            <Route path="History" element={<div>History</div>}></Route>
+            <Route path="History" element={<History />}></Route>
             <Route path="MyProfile" element={<div>MyProfile</div>}></Route>
             <Route path="Add_Attributes" element={<AddType />} ></Route>
             <Route path="Add_User" element={<AddUser />} ></Route>

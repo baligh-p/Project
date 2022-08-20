@@ -178,6 +178,7 @@ const UpdateLine = React.memo(({ display, removeLigne, setFirstGet, data, firstG
 
     const handleSubmitUpdate = () => {
         const datas = JSON.stringify({
+            idUser: localStorage.clid,
             idAddress: data.idAddress,
             bureau: bureau.current.value,
             noms: noms.current.value,
