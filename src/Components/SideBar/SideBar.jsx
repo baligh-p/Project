@@ -104,7 +104,7 @@ const SideBar = () => {
         else if (location.pathname.split("/").filter(element => element != "").find(element => element == "History")) {
             document.querySelector(".hist").classList.replace("notSelectedLink", "selectedLink")
         }
-        else if (location.pathname.split("/").filter(element => element != "").find(element => element == "MyProfile")) {
+        else if (location.pathname.split("/").filter(element => element != "").find(element => element == "changePwd")) {
             document.querySelector(".myPF").classList.replace("notSelectedLink", "selectedLink")
         }
         else if (location.pathname.split("/").filter(element => element != "").find(element => element == "Add_Attributes")) {
@@ -186,11 +186,9 @@ const SideBar = () => {
                             </svg>
                             <h3 className='t-ml-3 t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>Ajouter un Utilisateur</h3>
                         </Link>}
-                        <Link onClick={closeSideBar} to="/MyProfile" className='myPF t-select-none hover:t-relative hover:t-left-1 t-text-body t-cursor-pointer  t-w-full t-px-2  t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
-                                <path d="M5.975 17.425q1.4-.975 2.863-1.5Q10.3 15.4 12 15.4t3.163.525q1.462.525 2.862 1.5 1.025-1.15 1.575-2.487.55-1.338.55-2.938 0-3.35-2.4-5.75T12 3.85q-3.35 0-5.75 2.4T3.85 12q0 1.6.55 2.938.55 1.337 1.575 2.487ZM12 12.95q-1.45 0-2.45-1-1-1-1-2.45 0-1.45 1-2.45 1-1 2.45-1 1.45 0 2.45 1 1 1 1 2.45 0 1.45-1 2.45-1 1-2.45 1Zm0 8.55q-1.95 0-3.688-.75-1.737-.75-3.025-2.038Q4 17.425 3.25 15.688q-.75-1.738-.75-3.713 0-1.95.75-3.675Q4 6.575 5.287 5.287 6.575 4 8.312 3.25q1.738-.75 3.713-.75 1.95 0 3.675.75 1.725.75 3.012 2.037Q20 6.575 20.75 8.3q.75 1.725.75 3.7 0 1.95-.75 3.688-.75 1.737-2.038 3.024Q17.425 20 15.7 20.75q-1.725.75-3.7.75Zm0-1.35q1.275 0 2.637-.475 1.363-.475 2.338-1.3-.975-.75-2.262-1.187-1.288-.438-2.713-.438t-2.725.425q-1.3.425-2.25 1.2.975.825 2.338 1.3 1.362.475 2.637.475Zm0-8.55q.85 0 1.475-.625.625-.625.625-1.475 0-.85-.625-1.475Q12.85 7.4 12 7.4q-.85 0-1.475.625Q9.9 8.65 9.9 9.5q0 .85.625 1.475.625.625 1.475.625Zm0-2.1Zm0 8.95Z" />
-                            </svg>
-                            <h3 className='t-ml-3 t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>{(user.username) && (user.username) || ""}</h3>
+                        <Link onClick={closeSideBar} to="/changePwd" className='myPF t-select-none hover:t-relative hover:t-left-1 t-text-body t-cursor-pointer  t-w-full t-px-2  t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M6.3 21.5q-.75 0-1.275-.525Q4.5 20.45 4.5 19.7v-9.4q0-.75.525-1.275Q5.55 8.5 6.3 8.5h1.2v-2q0-1.875 1.312-3.188Q10.125 2 12 2q1.875 0 3.188 1.312Q16.5 4.625 16.5 6.5v2h1.2q.75 0 1.275.525.525.525.525 1.275v9.4q0 .75-.525 1.275-.525.525-1.275.525Zm0-1.5h11.4q.125 0 .213-.087.087-.088.087-.213v-9.4q0-.125-.087-.213Q17.825 10 17.7 10H6.3q-.125 0-.212.087Q6 10.175 6 10.3v9.4q0 .125.088.213.087.087.212.087Zm5.7-3.25q.725 0 1.238-.512.512-.513.512-1.238t-.512-1.238q-.513-.512-1.238-.512t-1.238.512q-.512.513-.512 1.238t.512 1.238q.513.512 1.238.512ZM9 8.5h6v-2q0-1.25-.875-2.125T12 3.5q-1.25 0-2.125.875T9 6.5ZM6 20V10v10Z" /></svg>
+                            <h3 className='t-ml-3 t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>Mot de Passe</h3>
                         </Link>
                         <div onClick={logout} className='deconnecter hover:t-text-white hover:t-fill-white t-duration-200 t-delay-75 t-select-none t-text-body t-cursor-pointer t-w-full t-px-2 t-text-red-500 t-fill-red-500 t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
                             <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
