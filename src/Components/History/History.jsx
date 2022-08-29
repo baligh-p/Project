@@ -49,7 +49,7 @@ const History = () => {
             signal: signal
         })
             .then((response) => {
-                console.log(response.data)
+
                 if (response.data.type && response.data.type == "token") {
                     if (response.data.error.startsWith("The Token has expired on")) {
                         customAxios.get("/tkn/refresh", {
@@ -181,7 +181,6 @@ const History = () => {
                     <select ref={searchMethodSelect} onChange={(e) => { setSearchMethod(e.target.value) }} className='t-cursor-pointer t-h-[44px] t-bg-blue-500 t-outline-none t-text-white t-text-[12px] t-w-20 t-text-center t-rounded-r-sm'>
                         <option className='t-bg-white t-text-black t-text-[14px]' value="ip">Adresse IP</option>
                         <option className='t-bg-white t-text-black t-text-[14px]' value="bureau">Bureau</option>
-                        <option className='t-bg-white t-text-black t-text-[14px]' value="nom">Noms</option>
                         <option className='t-bg-white t-text-black t-text-[14px]' value="utilisateur">Utilisateur</option>
                     </select>
                 </div>
@@ -231,9 +230,6 @@ const History = () => {
                                 }
                                 else if (searchMethod == "utilisateur") {
                                     ret = element.user.username.toUpperCase().startsWith(searchValue.toUpperCase())
-                                }
-                                else {
-                                    ret = element.noms.toUpperCase().indexOf(searchValue.toUpperCase()) != -1
                                 }
                             }
                             if (ret && directionFilter != "tout") {

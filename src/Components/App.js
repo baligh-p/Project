@@ -10,6 +10,7 @@ import AddUser from "./AddUser/AddUser";
 import AddType from "./AddType/AddType";
 import History from "./History/History";
 import ChangePassword from "./ChangePassword/ChangePassword";
+import Statistic from "./Statistic/Statistic";
 
 const App = () => {
 
@@ -19,6 +20,7 @@ const App = () => {
 
         <Route path="/" element={<AuthRouter />}>
           <Route path="" element={<SideBar />}>
+            <Route path="" element={<Statistic />} />
             <Route path="IP_List/:direction" element={<ListPage />} />
             <Route path="History" element={<History />}></Route>
             <Route path="changePwd" element={<ChangePassword />}></Route>

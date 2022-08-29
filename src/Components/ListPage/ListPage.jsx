@@ -40,6 +40,7 @@ const ListPage = () => {
 
     const searchMethodSelect = useRef(null)
     const table = useRef(null)
+    const nomsContainer = useRef(null)
 
     const { direction } = useParams()
 
@@ -125,7 +126,7 @@ const ListPage = () => {
             fetchIps(true)
         }
         else {
-            var interval = setTimeout(fetchIps, 5000)
+            var interval = setTimeout(fetchIps, 3000)
         }
 
 
@@ -493,6 +494,7 @@ const ListPage = () => {
             return { opacity: 1 }
         }
     }
+
     return (
         <>
             {(selectedIp.id) && <div className='t-fixed t-top-0 t-left-0 t-z-50 t-h-screen t-w-full t-bg-neutral-900/20 t-flex t-items-center t-justify-center'>
@@ -641,13 +643,13 @@ const ListPage = () => {
                                         {ip.direction}
                                     </td>
                                     <td className="t-py-4 t-px-6">
-                                        {ip.type.typeName}
+                                        {ip.type?.typeName ? ip.type.typeName : "______"}
                                     </td>
                                     <td className="t-py-4 t-px-6 t-whitespace-nowrap">
                                         {ip.mark?.markName ? ip.mark.markName : "______"}
                                     </td>
                                     <td className="t-py-4 t-px-6 t-text-left">
-                                        {ip.noms ? ip.noms : "______"}
+                                        <p> {ip.noms ? ip.noms.split("\n").map((element, index) => <p key={index}>{element}<br /></p>) : "______"}</p>
                                     </td>
                                     <td className="t-py-4 t-px-3 t-text-left t-flex t-justify-center t-items-center t-space-x-2">
                                         <div onClick={() => { confirmDelete(ip.idAddress, ip.address) }} className='t-p-1.5 t-rounded-full t-fill-white hover:t-fill-red-500 t-border-2 t-duration-300 t-delay-75 t-border-transparent hover:t-border-red-500 hover:t-bg-white t-bg-red-500 t-cursor-pointer t-w-min'>

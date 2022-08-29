@@ -170,12 +170,6 @@ const SideBar = () => {
                                 <path d="m9.4 17.575-.95-.95 4.65-4.65-4.65-4.65.95-.95 5.6 5.6Z" />
                             </svg>
                         </Link>
-                        <Link onClick={closeSideBar} to="/History" className='hist t-select-none t-text-body hover:t-ml-1 t-cursor-pointer t-w-full t-px-2  t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
-                                <path d="M12.325 20.5Q9 20.5 6.55 18.387 4.1 16.275 3.8 13h1.4q.35 2.65 2.35 4.4 2 1.75 4.725 1.75 2.95 0 5.025-2.088 2.075-2.087 2.075-5.062 0-2.95-2.05-5.05-2.05-2.1-5-2.1-1.675 0-3.15.712-1.475.713-2.5 1.988h2.65V8.9h-4.85V4.05h1.35V6.5Q7 5.025 8.713 4.262q1.712-.762 3.612-.762 1.75 0 3.275.662 1.525.663 2.675 1.825 1.15 1.163 1.8 2.713.65 1.55.65 3.3 0 1.75-.65 3.3-.65 1.55-1.8 2.713-1.15 1.162-2.675 1.824-1.525.663-3.275.663Zm2.725-4.25-4-3.95V6.6h1.35v5.1l3.6 3.6Z" />
-                            </svg>
-                            <h3 className='t-ml-3 t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>Historique</h3>
-                        </Link>
                         <Link onClick={closeSideBar} to="/Add_Attributes" className='typesLink t-select-none t-text-body hover:t-ml-1 t-cursor-pointer t-w-full t-px-2  t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
                             <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M11.25 18.75v-6h-6v-1.5h6v-6h1.5v6h6v1.5h-6v6Z" /></svg>
                             <h3 className='t-ml-3 t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>Ajouter des Attributs</h3>
@@ -189,6 +183,12 @@ const SideBar = () => {
                         <Link onClick={closeSideBar} to="/changePwd" className='myPF t-select-none hover:t-relative hover:t-left-1 t-text-body t-cursor-pointer  t-w-full t-px-2  t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
                             <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M6.3 21.5q-.75 0-1.275-.525Q4.5 20.45 4.5 19.7v-9.4q0-.75.525-1.275Q5.55 8.5 6.3 8.5h1.2v-2q0-1.875 1.312-3.188Q10.125 2 12 2q1.875 0 3.188 1.312Q16.5 4.625 16.5 6.5v2h1.2q.75 0 1.275.525.525.525.525 1.275v9.4q0 .75-.525 1.275-.525.525-1.275.525Zm0-1.5h11.4q.125 0 .213-.087.087-.088.087-.213v-9.4q0-.125-.087-.213Q17.825 10 17.7 10H6.3q-.125 0-.212.087Q6 10.175 6 10.3v9.4q0 .125.088.213.087.087.212.087Zm5.7-3.25q.725 0 1.238-.512.512-.513.512-1.238t-.512-1.238q-.513-.512-1.238-.512t-1.238.512q-.512.513-.512 1.238t.512 1.238q.513.512 1.238.512ZM9 8.5h6v-2q0-1.25-.875-2.125T12 3.5q-1.25 0-2.125.875T9 6.5ZM6 20V10v10Z" /></svg>
                             <h3 className='t-ml-3 t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>Mot de Passe</h3>
+                        </Link>
+                        <Link onClick={closeSideBar} to="/History" className='hist t-select-none t-text-body hover:t-ml-1 t-cursor-pointer t-w-full t-px-2  t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
+                                <path d="M12.325 20.5Q9 20.5 6.55 18.387 4.1 16.275 3.8 13h1.4q.35 2.65 2.35 4.4 2 1.75 4.725 1.75 2.95 0 5.025-2.088 2.075-2.087 2.075-5.062 0-2.95-2.05-5.05-2.05-2.1-5-2.1-1.675 0-3.15.712-1.475.713-2.5 1.988h2.65V8.9h-4.85V4.05h1.35V6.5Q7 5.025 8.713 4.262q1.712-.762 3.612-.762 1.75 0 3.275.662 1.525.663 2.675 1.825 1.15 1.163 1.8 2.713.65 1.55.65 3.3 0 1.75-.65 3.3-.65 1.55-1.8 2.713-1.15 1.162-2.675 1.824-1.525.663-3.275.663Zm2.725-4.25-4-3.95V6.6h1.35v5.1l3.6 3.6Z" />
+                            </svg>
+                            <h3 className='t-ml-3 t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>Historique</h3>
                         </Link>
                         <div onClick={logout} className='deconnecter hover:t-text-white hover:t-fill-white t-duration-200 t-delay-75 t-select-none t-text-body t-cursor-pointer t-w-full t-px-2 t-text-red-500 t-fill-red-500 t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
                             <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
