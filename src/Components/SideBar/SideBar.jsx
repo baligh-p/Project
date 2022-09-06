@@ -178,11 +178,11 @@ const SideBar = () => {
                             <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
                                 <path d="M18.125 13.75v-3h-3v-1.5h3v-3h1.5v3h3v1.5h-3v3Zm-9.25-2.05q-1.45 0-2.475-1.038Q5.375 9.625 5.375 8.2q0-1.45 1.025-2.475Q7.425 4.7 8.875 4.7q1.45 0 2.475 1.025Q12.375 6.75 12.375 8.2q0 1.425-1.025 2.462Q10.325 11.7 8.875 11.7Zm-7.5 7.6v-2.225q0-.725.4-1.35.4-.625 1.075-.975 1.475-.725 2.988-1.088Q7.35 13.3 8.875 13.3t3.038.362q1.512.363 2.987 1.088.675.35 1.075.975.4.625.4 1.35V19.3Zm1.5-1.5h12v-.725q0-.3-.175-.55-.175-.25-.475-.425-1.3-.625-2.637-.963-1.338-.337-2.713-.337t-2.713.337q-1.337.338-2.637.963-.3.175-.475.425t-.175.55Zm6-7.6q.825 0 1.413-.588.587-.587.587-1.412t-.587-1.413Q9.7 6.2 8.875 6.2q-.825 0-1.412.587-.588.588-.588 1.413 0 .825.588 1.412.587.588 1.412.588Zm0-2Zm0 6.6Z" />
                             </svg>
-                            <h3 className='t-ml-3 t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>Ajouter un Utilisateur</h3>
+                            <h3 className='t-ml-3 t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>Utilisateurs</h3>
                         </Link>}
                         <Link onClick={closeSideBar} to="/changePwd" className='myPF t-select-none hover:t-relative hover:t-left-1 t-text-body t-cursor-pointer  t-w-full t-px-2  t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
                             <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M6.3 21.5q-.75 0-1.275-.525Q4.5 20.45 4.5 19.7v-9.4q0-.75.525-1.275Q5.55 8.5 6.3 8.5h1.2v-2q0-1.875 1.312-3.188Q10.125 2 12 2q1.875 0 3.188 1.312Q16.5 4.625 16.5 6.5v2h1.2q.75 0 1.275.525.525.525.525 1.275v9.4q0 .75-.525 1.275-.525.525-1.275.525Zm0-1.5h11.4q.125 0 .213-.087.087-.088.087-.213v-9.4q0-.125-.087-.213Q17.825 10 17.7 10H6.3q-.125 0-.212.087Q6 10.175 6 10.3v9.4q0 .125.088.213.087.087.212.087Zm5.7-3.25q.725 0 1.238-.512.512-.513.512-1.238t-.512-1.238q-.513-.512-1.238-.512t-1.238.512q-.512.513-.512 1.238t.512 1.238q.513.512 1.238.512ZM9 8.5h6v-2q0-1.25-.875-2.125T12 3.5q-1.25 0-2.125.875T9 6.5ZM6 20V10v10Z" /></svg>
-                            <h3 className='t-ml-3 t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>Mot de Passe</h3>
+                            <h3 className='t-ml-3 t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>Changer Mot de Passe</h3>
                         </Link>
                         <Link onClick={closeSideBar} to="/History" className='hist t-select-none t-text-body hover:t-ml-1 t-cursor-pointer t-w-full t-px-2  t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
                             <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
