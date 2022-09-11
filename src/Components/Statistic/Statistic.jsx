@@ -96,11 +96,11 @@ const Statistic = () => {
                 <div className='t-m-auto t-flex-wrap t-w-full t-flex t-flex-col lg:t-flex-row t-p-5 t-items-center t-justify-around'>
                     {Object.keys(statistic).map((element, index) => {
                         const data = {
-                            labels: statistic[element].map((element) => Object.keys(element)[0]),
+                            labels: statistic[element].slice().filter(element => Object.keys(element)[0] != "null").map((element) => Object.keys(element)[0]),
                             datasets: [
                                 {
                                     label: '# of Votes',
-                                    data: statistic[element].map((element) => Object.values(element)[0]),
+                                    data: statistic[element].slice().filter(element => Object.keys(element)[0] != "null").map((element) => Object.values(element)[0]),
 
                                     backgroundColor: [
                                         'rgba(255, 99, 132, 0.2)',

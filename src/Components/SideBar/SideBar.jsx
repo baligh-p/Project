@@ -10,6 +10,7 @@ const SideBar = () => {
     const { direction } = useParams()
 
     const sideBar = useRef(null)
+    const dropDownContainer = useRef(null)
 
     const [showSecondSideBar, setShowSecondSideBar] = useState(false)
     const [user, setUser] = useRecoilState(UserAtom)
@@ -138,8 +139,46 @@ const SideBar = () => {
         localStorage.clid = ""
         setUser({ isLogged: false, id: null, username: null, role: null })
     }
+    const toggleDropDown = () => {
+        const closeEventClick = () => {
+
+            document.removeEventListener("mouseup", closeEventClick)
+            dropDownContainer.current.classList.replace("dropDownContainer_active", "dropDownContainer_inactive")
+
+        }
+        dropDownContainer.current.classList.replace("dropDownContainer_inactive", "dropDownContainer_active")
+        document.addEventListener("mouseup", closeEventClick)
+    }
     return (
         <div className='t-flex t-font-body t-items-start t-h-full'>
+            <div className='lg:t-flex t-flex-col t-hidden t-z-50 t-absolute t-top-[3%] t-right-[3%]'>
+                <div onClick={toggleDropDown} className='userIcon t-flex t-items-center t-cursor-pointer'>
+                    <div className='t-bg-white t-shadow t-shadow-md t-p-px t-rounded-md t-fill-neutral-600 t-mr-2'>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="40" width="40"><path d="M20 19.958q-2.75 0-4.562-1.812-1.813-1.813-1.813-4.563t1.813-4.562Q17.25 7.208 20 7.208t4.562 1.813q1.813 1.812 1.813 4.562t-1.813 4.563Q22.75 19.958 20 19.958ZM6.667 33.333v-4.166q0-1.542.77-2.688.771-1.146 2.021-1.729 2.709-1.25 5.313-1.896 2.604-.646 5.229-.646t5.208.646q2.584.646 5.334 1.896 1.25.625 2.02 1.75.771 1.125.771 2.667v4.166Zm2.791-2.791h21.084v-1.375q0-.584-.334-1.125-.333-.542-.833-.792-2.542-1.25-4.771-1.75T20 25q-2.375 0-4.625.5t-4.75 1.75q-.542.25-.854.792-.313.541-.313 1.125ZM20 17.208q1.542 0 2.583-1.041 1.042-1.042 1.042-2.584 0-1.541-1.042-2.583Q21.542 9.958 20 9.958q-1.542 0-2.583 1.042-1.042 1.042-1.042 2.583 0 1.542 1.042 2.584 1.041 1.041 2.583 1.041Zm0-3.625Zm0 16.959Z" /></svg>
+                    </div>
+                    <div>
+                        <h3 className='t-tracking-wide t-text-md t-font-bold t-text-neutral-600'>{user.username}</h3>
+                        <h4 className='t-text-xs t-text-stone-500'>{user.role.split("_")[1]}</h4>
+                    </div>
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="40" width="40"><path d="m20 25-8.333-8.292h16.666Z" /></svg>
+                    </div>
+                </div>
+                <div ref={dropDownContainer} className='t-w-52 t-duration-500 dropDownContainer_inactive t-bg-white t-shadow-lg t-rounded-lg t-shadow-neutral-300 t-flex t-flex-col
+                 t-absolute t-mt-12 t-right-0'>
+                    <Link to="/changePwd" className='t-rounded-t-lg t-flex t-items-center hover:t-bg-stone-200 t-space-x-2 t-p-2 t-duration-200 t-delay-75 t-cursor-pointer'>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M6.3 21.5q-.75 0-1.275-.525Q4.5 20.45 4.5 19.7v-9.4q0-.75.525-1.275Q5.55 8.5 6.3 8.5h1.2v-2q0-1.875 1.312-3.188Q10.125 2 12 2q1.875 0 3.188 1.312Q16.5 4.625 16.5 6.5v2h1.2q.75 0 1.275.525.525.525.525 1.275v9.4q0 .75-.525 1.275-.525.525-1.275.525Zm0-1.5h11.4q.125 0 .213-.087.087-.088.087-.213v-9.4q0-.125-.087-.213Q17.825 10 17.7 10H6.3q-.125 0-.212.087Q6 10.175 6 10.3v9.4q0 .125.088.213.087.087.212.087Zm5.7-3.25q.725 0 1.238-.512.512-.513.512-1.238t-.512-1.238q-.513-.512-1.238-.512t-1.238.512q-.512.513-.512 1.238t.512 1.238q.513.512 1.238.512ZM9 8.5h6v-2q0-1.25-.875-2.125T12 3.5q-1.25 0-2.125.875T9 6.5ZM6 20V10v10Z" /></svg>
+                        <h3 className='t-text-[14px] t-text-semibold t-select-none'>Change Mot de Passe</h3>
+                    </Link>
+                    <div onClick={() => { logout() }} className='t-flex t-rounded-b-lg t-items-center hover:t-bg-stone-200 t-space-x-2 t-p-2 t-duration-200 t-delay-75 t-cursor-pointer'>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
+                            <path d="M5.775 21.5q-.925 0-1.537-.613-.613-.612-.613-1.537V5.95q0-.925.613-1.538Q4.85 3.8 5.775 3.8h6.4v1.35h-6.4q-.3 0-.55.25-.25.25-.25.55v13.4q0 .3.25.55.25.25.55.25h6.4v1.35Zm10.5-4.75-1.025-1 2.45-2.45H9.075v-1.35H17.7L15.25 9.5l1.025-.95 4.1 4.1Z" />
+                        </svg>
+                        <h3 className='t-text-[14px] t-text-semibold t-select-none'>Se Deconnecter</h3>
+                    </div>
+                </div>
+            </div>
+
             <div ref={sideBar} className='sideBar t-font-body lg:t-w-[20.5%] t-w-full t-z-50 t-fixed lg:t-top-0 t-top-[4.3rem] t-duration-500 t-delay-75 lg:t-left-0 -t-left-full  t-bg-[#202020] t-h-full t-px-5 t-py-3'>
                 <div className='t-h-[4.3rem] lg:t-h-min lg:t-mt-1 t-flex t-items-center lg:t-w-auto t-w-full t-bg-[#202020] lg:t-static t-fixed t-top-0 t-left-0'>
                     <div id="burger" onClick={toggleSideBar}><div className="burgerLight t-flex lg:t-hidden t-z-20 t-ml-4"></div></div>
@@ -180,7 +219,7 @@ const SideBar = () => {
                             </svg>
                             <h3 className='t-ml-3 t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>Utilisateurs</h3>
                         </Link>}
-                        <Link onClick={closeSideBar} to="/changePwd" className='myPF t-select-none hover:t-relative hover:t-left-1 t-text-body t-cursor-pointer  t-w-full t-px-2  t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
+                        <Link onClick={closeSideBar} to="/changePwd" className='myPF lg:t-hidden  t-select-none hover:t-relative hover:t-left-1 t-text-body t-cursor-pointer  t-w-full t-px-2  t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
                             <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M6.3 21.5q-.75 0-1.275-.525Q4.5 20.45 4.5 19.7v-9.4q0-.75.525-1.275Q5.55 8.5 6.3 8.5h1.2v-2q0-1.875 1.312-3.188Q10.125 2 12 2q1.875 0 3.188 1.312Q16.5 4.625 16.5 6.5v2h1.2q.75 0 1.275.525.525.525.525 1.275v9.4q0 .75-.525 1.275-.525.525-1.275.525Zm0-1.5h11.4q.125 0 .213-.087.087-.088.087-.213v-9.4q0-.125-.087-.213Q17.825 10 17.7 10H6.3q-.125 0-.212.087Q6 10.175 6 10.3v9.4q0 .125.088.213.087.087.212.087Zm5.7-3.25q.725 0 1.238-.512.512-.513.512-1.238t-.512-1.238q-.513-.512-1.238-.512t-1.238.512q-.512.513-.512 1.238t.512 1.238q.513.512 1.238.512ZM9 8.5h6v-2q0-1.25-.875-2.125T12 3.5q-1.25 0-2.125.875T9 6.5ZM6 20V10v10Z" /></svg>
                             <h3 className='t-ml-3 t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>Changer Mot de Passe</h3>
                         </Link>
@@ -190,7 +229,7 @@ const SideBar = () => {
                             </svg>
                             <h3 className='t-ml-3 t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>Historique</h3>
                         </Link>
-                        <div onClick={logout} className='deconnecter hover:t-text-white hover:t-fill-white t-duration-200 t-delay-75 t-select-none t-text-body t-cursor-pointer t-w-full t-px-2 t-text-red-500 t-fill-red-500 t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
+                        <div onClick={logout} className='deconnecter lg:t-hidden hover:t-text-white hover:t-fill-white t-duration-200 t-delay-75 t-select-none t-text-body t-cursor-pointer t-w-full t-px-2 t-text-red-500 t-fill-red-500 t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
                             <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
                                 <path d="M5.775 21.5q-.925 0-1.537-.613-.613-.612-.613-1.537V5.95q0-.925.613-1.538Q4.85 3.8 5.775 3.8h6.4v1.35h-6.4q-.3 0-.55.25-.25.25-.25.55v13.4q0 .3.25.55.25.25.55.25h6.4v1.35Zm10.5-4.75-1.025-1 2.45-2.45H9.075v-1.35H17.7L15.25 9.5l1.025-.95 4.1 4.1Z" />
                             </svg>

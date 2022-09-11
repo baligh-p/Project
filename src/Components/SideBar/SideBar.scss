@@ -137,3 +137,21 @@
   animation-name: opacityAnimation;
   animation-duration: 1.5s;
 }
+.userIcon {
+  &:hover > div:first-child {
+    background-color: rgb(243, 243, 243);
+    transition: background-color 0s 0s linear;
+  }
+  &:hover > div:nth-child(2) h3 {
+    text-decoration: underline;
+  }
+}
+
+.dropDownContainer_active {
+  max-height: auto;
+  overflow: hidden;
+}
+.dropDownContainer_inactive {
+  overflow: hidden;
+  max-height: 0;
+}

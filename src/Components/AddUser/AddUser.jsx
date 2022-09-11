@@ -253,7 +253,7 @@ const AddUser = () => {
         var date = d.split("T")[0].split("-")
         date = date[2] + "/" + date[1] + "/" + date[0]
         var time = d.split("T")[1].split(":")
-        time = time[0] + ":" + time[1]
+        time = (time[0] != "23" ? (Number(time[0]) + 1) : "00") + ":" + time[1]
         return time + " " + date
     }
 
@@ -368,7 +368,7 @@ const AddUser = () => {
                                         {element.role.split("_")[1] != "ADMIN" ? "UTILISATEUR" : "ADMIN"}
                                     </td>
                                     <td className="t-py-4 t-px-6">
-                                        {formatData(element.createdAt)}
+                                        {element.createdAt && (formatData(element.createdAt))}
                                     </td>
                                 </tr>
                             })}

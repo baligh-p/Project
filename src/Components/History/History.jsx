@@ -169,7 +169,7 @@ const History = () => {
         var date = d.split("T")[0].split("-")
         date = date[2] + "/" + date[1] + "/" + date[0]
         var time = d.split("T")[1].split(":")
-        time = time[0] + ":" + time[1]
+        time = (time[0] != "23" ? (Number(time[0]) + 1) : "00") + ":" + time[1]
         return time + " " + date
     }
     return (

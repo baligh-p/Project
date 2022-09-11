@@ -101,12 +101,187 @@ const Line = React.memo(({ firstIp, display, removeLigne, setFirstGet, firstGet 
         var submit = true
         const reg = /[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+/
         if (address.current.value.match(reg) && address.current.value.match(reg)[0] == address.current.value.match(reg).input) {
+
         }
         else {
             submit = false
             address.current.classList.add("errorClass")
             notify("warning", "Adresse IP est Invalide")
         }
+        const getIndexs = (str, searchIndex) => {
+            var indices = [];
+            for (var i = 0; i < str.length; i++) {
+                if (str[i] === searchIndex) indices.push(i);
+            }
+            return indices
+        }
+        if (submit && firstIp) {
+            const firstOctet = Number(firstIp.split(".")[0])
+            if (firstOctet > 0 && 127 > firstOctet) {
+                if (address.current.value.substring(0, getIndexs(address.current.value, ".")[0] + 1) !== firstIp.substring(0, getIndexs(firstIp, ".")[0] + 1)) {
+                    submit = false
+                    address.current.classList.add("errorClass")
+                    notify("warning", "Adresse IP ne peut pas etre dans cet réseau")
+                }
+            }
+            else if (firstOctet > 127 && 192 > firstOctet) {
+                if (address.current.value.substring(0, getIndexs(address.current.value, ".")[1] + 1) !== firstIp.substring(0, getIndexs(firstIp, ".")[1] + 1)) {
+                    submit = false
+                    address.current.classList.add("errorClass")
+                    notify("warning", "Adresse IP ne peut pas etre dans cet réseau")
+                }
+            }
+            else {
+                if (address.current.value.substring(0, address.current.value.lastIndexOf(".") + 1) !== firstIp.substring(0, firstIp.lastIndexOf(".") + 1)) {
+                    submit = false
+                    address.current.classList.add("errorClass")
+                    notify("warning", "Adresse IP ne peut pas etre dans cet réseau")
+                }
+            }
+        }
+
+
+        if (submit) {
+            const tableOfOctets = address.current.value.split(".")
+            const classOctet = Number(tableOfOctets[0])
+            if (classOctet > 0 && 127 > classOctet) {
+                for (var index = 0; index < tableOfOctets.length - 2; index++) {
+                    var element = Number(tableOfOctets[index])
+                    if (index == 1) {
+                        if (element > 254 && Number(tableOfOctets[index + 1]) > 254 && Number(tableOfOctets[index + 2]) > 254) {
+                            submit = false
+                            address.current.classList.add("errorClass")
+                            notify("warning", "Adresse IP est Invalide")
+                        }
+                    }
+                    else {
+                        if (element > 255) {
+                            submit = false
+                            address.current.classList.add("errorClass")
+                            notify("warning", "Adresse IP est Invalide")
+                        }
+                    }
+                }
+            }
+            else if (classOctet > 127 && 192 > classOctet) {
+                for (var index = 0; index < tableOfOctets.length - 1; index++) {
+                    var element = Number(tableOfOctets[index])
+                    if (index == 2) {
+                        if (element > 254 && Number(tableOfOctets[index + 1]) > 254) {
+                            submit = false
+                            address.current.classList.add("errorClass")
+                            notify("warning", "Adresse IP est Invalide")
+                        }
+                    }
+                    else {
+                        if (element > 255) {
+                            submit = false
+                            address.current.classList.add("errorClass")
+                            notify("warning", "Adresse IP est Invalide")
+                        }
+                    }
+                }
+            }
+            else {
+                for (var index = 0; index < tableOfOctets.length; index++) {
+                    var element = Number(tableOfOctets[index])
+                    if (index == 3) {
+                        if (element > 254) {
+                            submit = false
+                            address.current.classList.add("errorClass")
+                            notify("warning", "Adresse IP est Invalide")
+                        }
+                    }
+                    else {
+                        if (element > 255) {
+                            submit = false
+                            address.current.classList.add("errorClass")
+                            notify("warning", "Adresse IP est Invalide")
+                        }
+                    }
+                }
+            }
+        }
+        if (submit) {
+            const firstOctetAddress = Number(address.current.value.split(".")[0])
+            if (firstOctetAddress > 0 && 127 > firstOctetAddress) {
+                if (Number(address.current.value.split(".")[2]) != 0 || Number(address.current.value.split(".")[1]) != 0) {
+                    if (Number(selectedType.typeName.toUpperCase() != "LAPTOP" && selectedType.typeName.toUpperCase() != "PC")) {
+                        submit = false
+                        address.current.classList.add("errorClass")
+                        notify("warning", "Cet Rang est reservé pour PCs")
+                    }
+                }
+                else {
+                    if (Number(address.current.value.split(".")[3]) < 10) {
+                        submit = false
+                        address.current.classList.add("errorClass")
+                        notify("warning", "Cet Rang est reservé")
+                    }
+                    else if (Number(address.current.value.split(".")[3]) >= 10 && Number(address.current.value.split(".")[3]) <= 79 &&
+                        (selectedType.typeName.toUpperCase() == "LAPTOP" || selectedType.typeName.toUpperCase() == "PC")) {
+                        submit = false
+                        address.current.classList.add("errorClass")
+                        notify("warning", "Cet Rang est reservé pour les Accessoires Informatique")
+                    }
+                    else if (Number(address.current.value.split(".")[3]) >= 80 &&
+                        (selectedType.typeName.toUpperCase() != "LAPTOP" && selectedType.typeName.toUpperCase() != "PC")) {
+                        submit = false
+                        address.current.classList.add("errorClass")
+                        notify("warning", "Cet Rang est reservé pour PCs")
+                    }
+                }
+            }
+            else if (firstOctetAddress > 127 && 192 > firstOctetAddress) {
+
+                if (Number(address.current.value.split(".")[2]) != 0) {
+                    if (Number(selectedType.typeName.toUpperCase() != "LAPTOP" && selectedType.typeName.toUpperCase() != "PC")) {
+                        submit = false
+                        address.current.classList.add("errorClass")
+                        notify("warning", "Cet Rang est reservé pour PCs")
+                    }
+                }
+                else {
+                    if (Number(address.current.value.split(".")[3]) < 10) {
+                        submit = false
+                        address.current.classList.add("errorClass")
+                        notify("warning", "Cet Rang est reservé")
+                    }
+                    else if (Number(address.current.value.split(".")[3]) >= 10 && Number(address.current.value.split(".")[3]) <= 79 &&
+                        (selectedType.typeName.toUpperCase() == "LAPTOP" || selectedType.typeName.toUpperCase() == "PC")) {
+                        submit = false
+                        address.current.classList.add("errorClass")
+                        notify("warning", "Cet Rang est reservé pour les Accessoires Informatique")
+                    }
+                    else if (Number(address.current.value.split(".")[3]) >= 80 &&
+                        (selectedType.typeName.toUpperCase() != "LAPTOP" && selectedType.typeName.toUpperCase() != "PC")) {
+                        submit = false
+                        address.current.classList.add("errorClass")
+                        notify("warning", "Cet Rang est reservé pour PCs")
+                    }
+                }
+            }
+            else {
+                if (Number(address.current.value.split(".")[3]) < 10) {
+                    submit = false
+                    address.current.classList.add("errorClass")
+                    notify("warning", "Cet Rang est reservé")
+                }
+                else if (Number(address.current.value.split(".")[3]) >= 10 && Number(address.current.value.split(".")[3]) <= 79 &&
+                    (selectedType.typeName.toUpperCase() == "LAPTOP" || selectedType.typeName.toUpperCase() == "PC")) {
+                    submit = false
+                    address.current.classList.add("errorClass")
+                    notify("warning", "Cet Rang est reservé pour les Accessoires Informatique")
+                }
+                else if (Number(address.current.value.split(".")[3]) >= 80 &&
+                    (selectedType.typeName.toUpperCase() != "LAPTOP" && selectedType.typeName.toUpperCase() != "PC")) {
+                    submit = false
+                    address.current.classList.add("errorClass")
+                    notify("warning", "Cet Rang est reservé pour PCs")
+                }
+            }
+        }
+
         if (submit && !bureau.current.value.length) {
             submit = false
             notify("warning", "Le champ BUREAU est Obligatoire")
@@ -207,6 +382,11 @@ const Line = React.memo(({ firstIp, display, removeLigne, setFirstGet, firstGet 
 
 
     useEffect(() => {
+        const dir = document.getElementById("direction")
+        dir.value = direction
+    })
+
+    useEffect(() => {
         if (display) {
             if (firstIp == "max") {
                 notify("warning", "Vous atteindrez le maximum des adresses pour ce réseau")
@@ -226,7 +406,7 @@ const Line = React.memo(({ firstIp, display, removeLigne, setFirstGet, firstGet 
                 <input placeholder='Bureau' ref={bureau} type="text" className='t-h-full t-w-full t-outline-none t-border-r t-border-blue-400 t-p-1.5 t-box-border t-text-center' />
             </td>
             <td className="t-h-[70px] t-m-0 t-p-0 ">
-                <input placeholder='Direction' disabled={true} defaultValue={direction} type="text" className='t-h-full t-border-r t-border-blue-400 t-w-full t-outline-none t-p-1.5 t-box-border t-text-center' />
+                <input id="direction" placeholder='Direction' disabled={true} type="text" className='t-h-full t-border-r t-border-blue-400 t-w-full t-outline-none t-p-1.5 t-box-border t-text-center' />
             </td>
             <td className="t-h-[70px] t-m-0 t-p-0">
                 <select ref={type} onChange={() => { setSelectedType(() => typesList.filter((element) => element.idType == type.current.value)[0]) }} defaultValue={typesList.length ? typesList[0].idType : ""} className="t-cursor-pointer t-h-full t-bg-white t-outline-none t-border-r t-border-blue-400 t-text-blue-500

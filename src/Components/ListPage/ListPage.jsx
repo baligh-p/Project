@@ -9,6 +9,8 @@ import Loader from '../Loader/Loader'
 import Line from './Line'
 import useNotify from "../../CustomElement/UseNotify"
 import UpdateLine from './UpdateLine'
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Doughnut } from 'react-chartjs-2';
 const ListPage = () => {
     const [searchValue, setSearchValue] = useState("")
 
@@ -494,7 +496,47 @@ const ListPage = () => {
             return { opacity: 1 }
         }
     }
+    const data = {
+        labels: ["red", "blue", "green", "yellow"],
+        datasets: [
+            {
+                label: '# of Votes',
+                data: [1, 5, 9, 10],
 
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 159, 200, 0.2)',
+                    'rgba(100, 159, 200, 0.2)',
+                    'rgba(100, 50, 200, 0.2)',
+                    'rgba(100, 50, 10, 0.2)',
+                    'rgba(50, 50, 10, 0.2)',
+                    'rgba(50, 10, 10, 0.2)',
+                    'rgba(50, 10, 100,0.2)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(255, 159, 200, 1)',
+                    'rgba(100, 159, 200, 1)',
+                    'rgba(100, 50, 200, 1)',
+                    'rgba(100, 50, 10, 1)',
+                    'rgba(50, 50, 10, 1)',
+                    'rgba(50, 10, 10, 1)',
+                    'rgba(50, 10, 100,0.2)',
+                ],
+                borderWidth: 1,
+            },
+        ],
+    };
     return (
         <>
             {(selectedIp.id) && <div className='t-fixed t-top-0 t-left-0 t-z-50 t-h-screen t-w-full t-bg-neutral-900/20 t-flex t-items-center t-justify-center'>
