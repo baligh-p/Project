@@ -11,6 +11,7 @@ import AddType from "./AddType/AddType";
 import History from "./History/History";
 import ChangePassword from "./ChangePassword/ChangePassword";
 import Statistic from "./Statistic/Statistic";
+import AddDirection from "./AddDirection/AddDirection";
 
 const App = () => {
 
@@ -26,6 +27,7 @@ const App = () => {
             <Route path="changePwd" element={<ChangePassword />}></Route>
             <Route path="Add_Attributes" element={<AddType />} ></Route>
             <Route path="Add_User" element={<AddUser />} ></Route>
+            <Route path="Add_Dir" element={<AddDirection />} />
           </Route>
         </Route>
 

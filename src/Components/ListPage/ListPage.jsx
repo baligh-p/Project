@@ -9,8 +9,6 @@ import Loader from '../Loader/Loader'
 import Line from './Line'
 import useNotify from "../../CustomElement/UseNotify"
 import UpdateLine from './UpdateLine'
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Doughnut } from 'react-chartjs-2';
 const ListPage = () => {
     const [searchValue, setSearchValue] = useState("")
 
@@ -36,13 +34,14 @@ const ListPage = () => {
     const [typesList, setTypesList] = useState([])
     const [markList, setMarkList] = useState([])
 
+    const [generateType, setGenerateType] = useState(false)
+
 
     const [user, setUser] = useRecoilState(UserAtom)
 
 
     const searchMethodSelect = useRef(null)
     const table = useRef(null)
-    const nomsContainer = useRef(null)
 
     const { direction } = useParams()
 
@@ -333,13 +332,13 @@ const ListPage = () => {
             const len = ips.length
             const firstOctet = ips[0]?.address.split(".")[0]
             if (firstOctet > 0 && 127 > firstOctet) {
-                return (2 ** 24) - 3 - ips.length > 1000 ? "+1000" : (2 ** 24) - 3 - ips.length
+                return (2 ** 24) - 3
             }
             else if (firstOctet > 127 && 192 > firstOctet) {
-                return (2 ** 16) - 3 - ips.length > 1000 ? "+1000" : (2 ** 24) - 3 - ips.length
+                return (2 ** 16) - 3
             }
             else if (firstOctet > 191 && firstOctet < 224) {
-                return (2 ** 8) - 3 - ips.length
+                return (2 ** 8) - 3
             }
             else {
                 return ""
@@ -455,18 +454,31 @@ const ListPage = () => {
                 }
             }
             else if (firstOctet > 191 && firstOctet < 224) {
-                if (sortedTable.length == 253) {
+                if (sortedTable.length == 245) {
                     return "max"
                 }
                 else if (sortedTable.length) {
                     address = sortedTable[0].address.substring(0, sortedTable[0].address.lastIndexOf(".") + 1)
-                    for (var index = 0; index < sortedTable.length; index++) {
-                        const element = Number(sortedTable[index].address.split(".")[3])
-                        if (element != index + 2) {
-                            return address + (index + 2)
+                    //address ::: xxx.xxx.xxx.
+                    if (generateType) {
+
+                        for (var index = 0; index < sortedTable.filter((element) => Number(element.address.split(".")[3]) >= 80).length; index++) {
+                            const element = Number(sortedTable.filter((element) => Number(element.address.split(".")[3]) >= 80)[index].address.split(".")[3])
+                            if (element != index + 80) {
+                                return address + (index + 80)
+                            }
                         }
+                        return address + (sortedTable.length + 79)
                     }
-                    return address + (sortedTable.length + 2)
+                    else {
+                        for (var index = 0; index < sortedTable.length; index++) {
+                            const element = Number(sortedTable[index].address.split(".")[3])
+                            if (element != index + 10) {
+                                return address + (index + 10)
+                            }
+                        }
+                        return address + (sortedTable.length + 2)
+                    }
                 }
                 else {
                     return null
@@ -496,47 +508,7 @@ const ListPage = () => {
             return { opacity: 1 }
         }
     }
-    const data = {
-        labels: ["red", "blue", "green", "yellow"],
-        datasets: [
-            {
-                label: '# of Votes',
-                data: [1, 5, 9, 10],
 
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                    'rgba(255, 159, 200, 0.2)',
-                    'rgba(100, 159, 200, 0.2)',
-                    'rgba(100, 50, 200, 0.2)',
-                    'rgba(100, 50, 10, 0.2)',
-                    'rgba(50, 50, 10, 0.2)',
-                    'rgba(50, 10, 10, 0.2)',
-                    'rgba(50, 10, 100,0.2)',
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)',
-                    'rgba(255, 159, 200, 1)',
-                    'rgba(100, 159, 200, 1)',
-                    'rgba(100, 50, 200, 1)',
-                    'rgba(100, 50, 10, 1)',
-                    'rgba(50, 50, 10, 1)',
-                    'rgba(50, 10, 10, 1)',
-                    'rgba(50, 10, 100,0.2)',
-                ],
-                borderWidth: 1,
-            },
-        ],
-    };
     return (
         <>
             {(selectedIp.id) && <div className='t-fixed t-top-0 t-left-0 t-z-50 t-h-screen t-w-full t-bg-neutral-900/20 t-flex t-items-center t-justify-center'>
@@ -567,11 +539,23 @@ const ListPage = () => {
                 <div className='t-w-10/12 t-mx-auto t-mb-5 t-hidden lg:t-flex t-space-x-9'>
                     <div className='wdj  t-bg-indigo-500 t-flex t-items-center t-justify-center t-h-28 t-shadow-lg t-shadow-neutral-300 t-rounded-md t-w-52'>
                         <div className=' t-flex-none'>
-                            <img src="/assets/icons/ip.png" className='t-h-20 t-ml-4 t-w-20' />
+                            <img src="/assets/icons/desktop-pc.png" className='t-h-[70px] t-relative t-left-4 t-mr-7 t-w-[70px]' />
                         </div>
                         <div className='t-ml-2 t-overflow-hidden'>
-                            <p className='t-text-[25px] t-text-white t-font-body t-font-bold t-break-words'>{ipDisponible()}</p>
-                            <p className='t-text-[13px] t-text-white t-font-body'>Adresses IP disponibles</p>
+                            {ipDisponible() && <p className='t-text-[25px] t-text-white t-font-body t-font-bold t-break-words'>{
+                                ipDisponible() - ips?.filter((element) => element.type.typeName.toUpperCase().startsWith("LAPTOP")
+                                    || element.type.typeName.toUpperCase().startsWith("PC")).length + 76 > 999 ? "+1000" :
+                                    (ipDisponible() - (ips?.filter((element) => element.type.typeName.toUpperCase().startsWith("LAPTOP") || element.type.typeName.toUpperCase().startsWith("PC")).length + 76))}</p>}
+                            <p className='t-text-[13px] t-text-white t-font-body'>Adresses IP disponibles (PC)</p>
+                        </div>
+                    </div>
+                    <div className='wdj t-bg-pink-500 t-flex t-items-center t-h-28 t-shadow-lg t-shadow-neutral-300 t-rounded-md t-w-52'>
+                        <div className=' t-flex-none'>
+                            <img src="/assets/icons/printer.png" className='t-h-[70px]   t-relative t-left-4 t-mr-7 t-w-[70px] ' />
+                        </div>
+                        <div className='t-ml-2 t-overflow-hidden'>
+                            {ipDisponible() && <p className='t-text-[25px] t-text-white t-font-body t-font-bold t-break-words'>{69 - ips?.filter((element) => !element.type.typeName.toUpperCase().startsWith("LAPTOP") && !element.type.typeName.toUpperCase().startsWith("PC")).length}</p>}
+                            <p className='t-text-[13px] t-text-white t-font-body '>Adresses IP disponibles (Accessoires)</p>
                         </div>
                     </div>
                 </div>
@@ -640,7 +624,7 @@ const ListPage = () => {
                             </tr>
                         </thead>
                         <tbody ref={table}>
-                            <Line firstIp={generateFirstIp()} display={addLine} firstGet={firstGet} setFirstGet={() => { setFirstGet(true) }} removeLigne={() => { setAddLine(false) }} />
+                            <Line setGenerateType={setGenerateType} firstIp={generateFirstIp()} display={addLine} firstGet={firstGet} setFirstGet={() => { setFirstGet(true) }} removeLigne={() => { setAddLine(false) }} />
                             {ips?.filter((element) => {
                                 var ret = true
                                 if (searchValue) {

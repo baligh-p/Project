@@ -115,6 +115,28 @@
     background: rgb(78, 134, 238);
   }
 }
+.customScrollBarDark {
+  &::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: rgb(235, 234, 234);
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: rgb(92, 92, 92);
+    border-radius: 2px;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgb(92, 92, 92);
+  }
+}
 
 @media screen and (min-width: 1024px) {
   .tableIp {

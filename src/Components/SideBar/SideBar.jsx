@@ -108,6 +108,9 @@ const SideBar = () => {
         else if (location.pathname.split("/").filter(element => element != "").find(element => element == "changePwd")) {
             document.querySelector(".myPF").classList.replace("notSelectedLink", "selectedLink")
         }
+        else if (location.pathname.split("/").filter(element => element != "").find(element => element == "Add_Dir")) {
+            document.querySelector(".addD").classList.replace("notSelectedLink", "selectedLink")
+        }
         else if (location.pathname.split("/").filter(element => element != "").find(element => element == "Add_Attributes")) {
             document.querySelector(".typesLink").classList?.replace("notSelectedLink", "selectedLink")
         }
@@ -211,7 +214,11 @@ const SideBar = () => {
                         </Link>
                         <Link onClick={closeSideBar} to="/Add_Attributes" className='typesLink t-select-none t-text-body hover:t-ml-1 t-cursor-pointer t-w-full t-px-2  t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
                             <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M11.25 18.75v-6h-6v-1.5h6v-6h1.5v6h6v1.5h-6v6Z" /></svg>
-                            <h3 className='t-ml-3 t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>Ajouter des Attributs</h3>
+                            <h3 className='t-ml-3 t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>Types et Marques</h3>
+                        </Link>
+                        <Link onClick={closeSideBar} to="/Add_Dir" className='typesLink addD t-select-none t-text-body hover:t-ml-1 t-cursor-pointer t-w-full t-px-2  t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M11.25 18.75v-6h-6v-1.5h6v-6h1.5v6h6v1.5h-6v6Z" /></svg>
+                            <h3 className='t-ml-3 t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>Directions</h3>
                         </Link>
                         {user?.role == "ROLE_ADMIN" && <Link onClick={closeSideBar} to="/Add_User" className='addUser t-select-none t-text-body hover:t-ml-1 t-cursor-pointer t-w-full t-px-2  t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
                             <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">

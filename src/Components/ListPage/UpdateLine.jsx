@@ -18,7 +18,7 @@ const UpdateLine = React.memo(({ display, removeLigne, setFirstGet, data, firstG
     const type = useRef(null)
     const mark = useRef(null)
     const noms = useRef(null)
-
+    const address = useRef(null)
 
     const notify = useNotify()
 
@@ -191,6 +191,86 @@ const UpdateLine = React.memo(({ display, removeLigne, setFirstGet, data, firstG
             notify("warning", "Le champ BUREAU est Obligatoire")
         }
         if (submit) {
+            const firstOctetAddress = Number(address.current.value.split(".")[0])
+            if (firstOctetAddress > 0 && 127 > firstOctetAddress) {
+                if (Number(address.current.value.split(".")[2]) != 0 || Number(address.current.value.split(".")[1]) != 0) {
+                    if (Number(selectedType.typeName.toUpperCase() != "LAPTOP" && selectedType.typeName.toUpperCase() != "PC")) {
+                        submit = false
+                        address.current.classList.add("errorClass")
+                        notify("warning", "Cet Rang est reservé pour PCs")
+                    }
+                }
+                else {
+
+                    if (Number(address.current.value.split(".")[3]) >= 10 && Number(address.current.value.split(".")[3]) <= 79 &&
+                        (selectedType.typeName.toUpperCase() == "LAPTOP" || selectedType.typeName.toUpperCase() == "PC")) {
+                        submit = false
+                        address.current.classList.add("errorClass")
+                        notify("warning", "Cet Rang est reservé pour les Accessoires Informatique")
+                    }
+                    // else if (Number(address.current.value.split(".")[3]) < 10) {
+                    //     submit = false
+                    //     address.current.classList.add("errorClass")
+                    //     notify("warning", "Cet Rang est reservé")
+                    // }
+                    else if (Number(address.current.value.split(".")[3]) >= 80 &&
+                        (selectedType.typeName.toUpperCase() != "LAPTOP" && selectedType.typeName.toUpperCase() != "PC")) {
+                        submit = false
+                        address.current.classList.add("errorClass")
+                        notify("warning", "Cet Rang est reservé pour PCs")
+                    }
+                }
+            }
+            else if (firstOctetAddress > 127 && 192 > firstOctetAddress) {
+
+                if (Number(address.current.value.split(".")[2]) != 0) {
+                    if (Number(selectedType.typeName.toUpperCase() != "LAPTOP" && selectedType.typeName.toUpperCase() != "PC")) {
+                        submit = false
+                        address.current.classList.add("errorClass")
+                        notify("warning", "Cet Rang est reservé pour PCs")
+                    }
+                }
+                else {
+                    if (Number(address.current.value.split(".")[3]) >= 10 && Number(address.current.value.split(".")[3]) <= 79 &&
+                        (selectedType.typeName.toUpperCase() == "LAPTOP" || selectedType.typeName.toUpperCase() == "PC")) {
+                        submit = false
+                        address.current.classList.add("errorClass")
+                        notify("warning", "Cet Rang est reservé pour les Accessoires Informatique")
+                    }
+                    // else if (Number(address.current.value.split(".")[3]) < 10) {
+                    //     submit = false
+                    //     address.current.classList.add("errorClass")
+                    //     notify("warning", "Cet Rang est reservé")
+                    // }
+                    else if (Number(address.current.value.split(".")[3]) >= 80 &&
+                        (selectedType.typeName.toUpperCase() != "LAPTOP" && selectedType.typeName.toUpperCase() != "PC")) {
+                        submit = false
+                        address.current.classList.add("errorClass")
+                        notify("warning", "Cet Rang est reservé pour PCs")
+                    }
+                }
+            }
+            else {
+                if (Number(address.current.value.split(".")[3]) >= 10 && Number(address.current.value.split(".")[3]) <= 79 &&
+                    (selectedType.typeName.toUpperCase() == "LAPTOP" || selectedType.typeName.toUpperCase() == "PC")) {
+                    submit = false
+                    address.current.classList.add("errorClass")
+                    notify("warning", "Cet Rang est reservé pour les Accessoires Informatique")
+                }
+                // else if (Number(address.current.value.split(".")[3]) < 10) {
+                //     submit = false
+                //     address.current.classList.add("errorClass")
+                //     notify("warning", "Cet Rang est reservé")
+                // }
+                else if (Number(address.current.value.split(".")[3]) >= 80 &&
+                    (selectedType.typeName.toUpperCase() != "LAPTOP" && selectedType.typeName.toUpperCase() != "PC")) {
+                    submit = false
+                    address.current.classList.add("errorClass")
+                    notify("warning", "Cet Rang est reservé pour PCs")
+                }
+            }
+        }
+        if (submit) {
             updateLine(datas)
         }
     }
@@ -198,7 +278,7 @@ const UpdateLine = React.memo(({ display, removeLigne, setFirstGet, data, firstG
     return (
         <tr style={{ display: display ? "" : "none", zIndex: "100" }} className="t-bg-white t-border-b dark:t-bg-gray-800 dark:t-border-gray-700">
             <td className="t-h-[70px] t-m-0 t-p-0 ">
-                <input placeholder='Adresse IP' disabled={true} defaultValue={data.address} type="text" className='t-h-full t-w-full t-outline-none t-border-r dark:t-border-gray-700 t-p-1.5 t-box-border t-text-center' />
+                <input ref={address} placeholder='Adresse IP' disabled={true} defaultValue={data.address} type="text" className='t-h-full t-w-full t-outline-none t-border-r dark:t-border-gray-700 t-p-1.5 t-box-border t-text-center' />
             </td>
             <td className="t-h-[70px] t-m-0 t-p-0 ">
                 <input placeholder='Bureau' ref={bureau} defaultValue={data.bureau} type="text" className='t-h-full t-w-full t-outline-none t-border-r dark:dark:t-border-gray-700 t-p-1.5 t-box-border t-text-center' />

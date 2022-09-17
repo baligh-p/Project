@@ -6,7 +6,7 @@ import Loader from '../Loader/Loader'
 import { useParams } from 'react-router-dom'
 import useNotify from '../../CustomElement/UseNotify'
 
-const Line = React.memo(({ firstIp, display, removeLigne, setFirstGet, firstGet }) => {
+const Line = React.memo(({ setGenerateType, firstIp, display, removeLigne, setFirstGet, firstGet }) => {
 
     const [user, setUser] = useRecoilState(UserAtom)
 
@@ -19,6 +19,7 @@ const Line = React.memo(({ firstIp, display, removeLigne, setFirstGet, firstGet 
     const type = useRef(null)
     const mark = useRef(null)
     const noms = useRef(null)
+
 
     const { direction } = useParams()
 
@@ -42,6 +43,15 @@ const Line = React.memo(({ firstIp, display, removeLigne, setFirstGet, firstGet 
             }
         })
     }
+
+
+    useEffect(() => {
+        if (selectedType?.typeName) {
+            (selectedType.typeName.toUpperCase() == "LAPTOP" || selectedType.typeName.toUpperCase() == "PC")
+                ? setGenerateType(true)
+                : setGenerateType(false)
+        }
+    }, [selectedType?.typeName])
 
     const addLigne = (data) => {
 
@@ -213,17 +223,18 @@ const Line = React.memo(({ firstIp, display, removeLigne, setFirstGet, firstGet 
                     }
                 }
                 else {
-                    if (Number(address.current.value.split(".")[3]) < 10) {
-                        submit = false
-                        address.current.classList.add("errorClass")
-                        notify("warning", "Cet Rang est reservé")
-                    }
-                    else if (Number(address.current.value.split(".")[3]) >= 10 && Number(address.current.value.split(".")[3]) <= 79 &&
+
+                    if (Number(address.current.value.split(".")[3]) >= 10 && Number(address.current.value.split(".")[3]) <= 79 &&
                         (selectedType.typeName.toUpperCase() == "LAPTOP" || selectedType.typeName.toUpperCase() == "PC")) {
                         submit = false
                         address.current.classList.add("errorClass")
                         notify("warning", "Cet Rang est reservé pour les Accessoires Informatique")
                     }
+                    // else if (Number(address.current.value.split(".")[3]) < 10) {
+                    //     submit = false
+                    //     address.current.classList.add("errorClass")
+                    //     notify("warning", "Cet Rang est reservé")
+                    // }
                     else if (Number(address.current.value.split(".")[3]) >= 80 &&
                         (selectedType.typeName.toUpperCase() != "LAPTOP" && selectedType.typeName.toUpperCase() != "PC")) {
                         submit = false
@@ -242,17 +253,17 @@ const Line = React.memo(({ firstIp, display, removeLigne, setFirstGet, firstGet 
                     }
                 }
                 else {
-                    if (Number(address.current.value.split(".")[3]) < 10) {
-                        submit = false
-                        address.current.classList.add("errorClass")
-                        notify("warning", "Cet Rang est reservé")
-                    }
-                    else if (Number(address.current.value.split(".")[3]) >= 10 && Number(address.current.value.split(".")[3]) <= 79 &&
+                    if (Number(address.current.value.split(".")[3]) >= 10 && Number(address.current.value.split(".")[3]) <= 79 &&
                         (selectedType.typeName.toUpperCase() == "LAPTOP" || selectedType.typeName.toUpperCase() == "PC")) {
                         submit = false
                         address.current.classList.add("errorClass")
                         notify("warning", "Cet Rang est reservé pour les Accessoires Informatique")
                     }
+                    // else if (Number(address.current.value.split(".")[3]) < 10) {
+                    //     submit = false
+                    //     address.current.classList.add("errorClass")
+                    //     notify("warning", "Cet Rang est reservé")
+                    // }
                     else if (Number(address.current.value.split(".")[3]) >= 80 &&
                         (selectedType.typeName.toUpperCase() != "LAPTOP" && selectedType.typeName.toUpperCase() != "PC")) {
                         submit = false
@@ -262,17 +273,17 @@ const Line = React.memo(({ firstIp, display, removeLigne, setFirstGet, firstGet 
                 }
             }
             else {
-                if (Number(address.current.value.split(".")[3]) < 10) {
-                    submit = false
-                    address.current.classList.add("errorClass")
-                    notify("warning", "Cet Rang est reservé")
-                }
-                else if (Number(address.current.value.split(".")[3]) >= 10 && Number(address.current.value.split(".")[3]) <= 79 &&
+                if (Number(address.current.value.split(".")[3]) >= 10 && Number(address.current.value.split(".")[3]) <= 79 &&
                     (selectedType.typeName.toUpperCase() == "LAPTOP" || selectedType.typeName.toUpperCase() == "PC")) {
                     submit = false
                     address.current.classList.add("errorClass")
                     notify("warning", "Cet Rang est reservé pour les Accessoires Informatique")
                 }
+                // else if (Number(address.current.value.split(".")[3]) < 10) {
+                //     submit = false
+                //     address.current.classList.add("errorClass")
+                //     notify("warning", "Cet Rang est reservé")
+                // }
                 else if (Number(address.current.value.split(".")[3]) >= 80 &&
                     (selectedType.typeName.toUpperCase() != "LAPTOP" && selectedType.typeName.toUpperCase() != "PC")) {
                     submit = false
@@ -329,6 +340,7 @@ const Line = React.memo(({ firstIp, display, removeLigne, setFirstGet, firstGet 
                 if (res.status == 200) {
                     setTypesList(res.data)
                     setSelectedType(res.data[0])
+
                 }
                 else {
                     notify("error", "Erreur d'execution de requete")
