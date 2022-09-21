@@ -290,9 +290,14 @@ const AddDirection = () => {
             </div>}
             <div className='lg:t-h-[95%] t-h-full lg:t-p-7 t-py-7 t-px-0 lg:t-w-3/5 t-w-full t-bg-white'>
                 <form className='t-flex t-h-full lg:t-relative lg:-t-top-10 t-flex-col t-items-end t-space-y-2 t-justify-end t-mx-auto lg:t-w-8/12 t-w-11/12 md:t-w-8/12 t-z-20'>
-                    <div className='t-flex t-flex-col t-w-full t-mx-auto'>
-                        <label onClick={(e) => { e.target.parentNode.children[1].focus() }} className='t-relative t-w-min t-h-0 t-duration-150 t-left-2 t-text-blue-500 t-cursor-text t-select-none  lg:t-translate-y-[18px] t-translate-y-[15px] t-text-[15px] lg:t-text-sm'>Direction</label>
-                        <input ref={direction} onFocus={handleFocus} onBlur={handleBlur} type="text" className="t-bg-white t-rounded-md t-duration-150 t-outline-none t-text-[17px] lg:t-text-base t-h-10 t-px-2 t-py-[24px] lg:t-py-[25px] t-border-2 t-border-blue-500" />
+                    <div className='t-flex t-items-center t-justify-end t-w-full t-relative'>
+                        <div className='t-flex t-flex-col t-w-full t-mx-auto'>
+                            <label onClick={(e) => { e.target.parentNode.children[1].focus() }} className='t-relative t-w-min t-h-0 t-duration-150 t-left-2 t-text-blue-500 t-cursor-text t-select-none  lg:t-translate-y-[18px] t-translate-y-[15px] t-text-[15px] lg:t-text-sm'>Direction</label>
+                            <input ref={direction} onFocus={handleFocus} onBlur={handleBlur} type="text" className="t-bg-white t-rounded-md t-duration-150 t-outline-none t-text-[17px] lg:t-text-base t-h-10 t-px-2 t-py-[24px] lg:t-py-[25px] t-border-2 t-border-blue-500" />
+                        </div>
+                        {(!isLoadingDir) && <button onClick={handleAddDirection} className='t-flex t-px-5  t-space-x-1 t-h-full t-absolute t-items-center t-justify-centert-h-[54px] t-z-30 t-rounded-md t-fill-white t-bg-blue-500'>
+                            <svg className='t-h-4 t-w-4' xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 32 32" viewBox="0 0 32 32"><path d="M2.4375,17.9375h11.625v11.625c0,1.06854,0.86896,1.9375,1.9375,1.9375s1.9375-0.86896,1.9375-1.9375v-11.625h11.625c1.06854,0,1.9375-0.86896,1.9375-1.9375s-0.86896-1.9375-1.9375-1.9375h-11.625V2.4375C17.9375,1.36896,17.06854,0.5,16,0.5s-1.9375,0.86896-1.9375,1.9375v11.625H2.4375C1.36896,14.0625,0.5,14.93146,0.5,16S1.36896,17.9375,2.4375,17.9375z" /></svg>
+                        </button> || (<Loader className="t-absolute t-ml-14" height="20px" size="20px" border="4px" color="#60a5fa" />)}
                     </div>
                     <div className='customScrollBarDark t-bg-white t-shadow-md t-border-2 t-border-blue-500 t-overflow-y-auto t-rounded-lg t-h-3/5 t-w-full'>
                         {directions.map((element, index) => {
@@ -409,10 +414,6 @@ const AddDirection = () => {
                             </div>
                         })}
                     </div>
-                    {(!isLoadingDir) && <button onClick={handleAddDirection} className='t-flex t-space-x-1 t-items-center t-justify-centert-h-[54px] t-z-30 t-p-2 t-rounded-md t-fill-white t-bg-blue-500'>
-                        <svg className='t-h-4 t-w-4' xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 32 32" viewBox="0 0 32 32"><path d="M2.4375,17.9375h11.625v11.625c0,1.06854,0.86896,1.9375,1.9375,1.9375s1.9375-0.86896,1.9375-1.9375v-11.625h11.625c1.06854,0,1.9375-0.86896,1.9375-1.9375s-0.86896-1.9375-1.9375-1.9375h-11.625V2.4375C17.9375,1.36896,17.06854,0.5,16,0.5s-1.9375,0.86896-1.9375,1.9375v11.625H2.4375C1.36896,14.0625,0.5,14.93146,0.5,16S1.36896,17.9375,2.4375,17.9375z" /></svg>
-                        <p className='t-text-white'>Ajouter</p>
-                    </button> || (<Loader className="lg:t-mx-0 t-mx-auto" height="30px" size="30px" border="6px" color="#60a5fa" />)}
                 </form>
             </div >
         </div >

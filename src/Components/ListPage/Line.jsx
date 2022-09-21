@@ -47,9 +47,9 @@ const Line = React.memo(({ setGenerateType, firstIp, display, removeLigne, setFi
 
     useEffect(() => {
         if (selectedType?.typeName) {
-            (selectedType.typeName.toUpperCase() == "LAPTOP" || selectedType.typeName.toUpperCase() == "PC")
-                ? setGenerateType(true)
-                : setGenerateType(false)
+            (selectedType.typeName.toUpperCase() == "SCANNER" || selectedType.typeName.toUpperCase() == "MULTIFONCTION" || selectedType.typeName.toUpperCase() == "IMPRIMANTE")
+                ? setGenerateType(false)
+                : setGenerateType(true)
         }
     }, [selectedType?.typeName])
 
@@ -125,30 +125,7 @@ const Line = React.memo(({ setGenerateType, firstIp, display, removeLigne, setFi
             }
             return indices
         }
-        if (submit && firstIp) {
-            const firstOctet = Number(firstIp.split(".")[0])
-            if (firstOctet > 0 && 127 > firstOctet) {
-                if (address.current.value.substring(0, getIndexs(address.current.value, ".")[0] + 1) !== firstIp.substring(0, getIndexs(firstIp, ".")[0] + 1)) {
-                    submit = false
-                    address.current.classList.add("errorClass")
-                    notify("warning", "Adresse IP ne peut pas etre dans cet réseau")
-                }
-            }
-            else if (firstOctet > 127 && 192 > firstOctet) {
-                if (address.current.value.substring(0, getIndexs(address.current.value, ".")[1] + 1) !== firstIp.substring(0, getIndexs(firstIp, ".")[1] + 1)) {
-                    submit = false
-                    address.current.classList.add("errorClass")
-                    notify("warning", "Adresse IP ne peut pas etre dans cet réseau")
-                }
-            }
-            else {
-                if (address.current.value.substring(0, address.current.value.lastIndexOf(".") + 1) !== firstIp.substring(0, firstIp.lastIndexOf(".") + 1)) {
-                    submit = false
-                    address.current.classList.add("errorClass")
-                    notify("warning", "Adresse IP ne peut pas etre dans cet réseau")
-                }
-            }
-        }
+
 
 
         if (submit) {
@@ -216,27 +193,35 @@ const Line = React.memo(({ setGenerateType, firstIp, display, removeLigne, setFi
             const firstOctetAddress = Number(address.current.value.split(".")[0])
             if (firstOctetAddress > 0 && 127 > firstOctetAddress) {
                 if (Number(address.current.value.split(".")[2]) != 0 || Number(address.current.value.split(".")[1]) != 0) {
-                    if (Number(selectedType.typeName.toUpperCase() != "LAPTOP" && selectedType.typeName.toUpperCase() != "PC")) {
+                    if (Number(selectedType.typeName.toUpperCase() == "IMPRIMANTE" ||
+                        selectedType.typeName.toUpperCase() == "SCANNER" ||
+                        selectedType.typeName.toUpperCase() == "MULTIFONCTION")) {
+
                         submit = false
                         address.current.classList.add("errorClass")
                         notify("warning", "Cet Rang est reservé pour PCs")
                     }
                 }
                 else {
-
                     if (Number(address.current.value.split(".")[3]) >= 10 && Number(address.current.value.split(".")[3]) <= 79 &&
-                        (selectedType.typeName.toUpperCase() == "LAPTOP" || selectedType.typeName.toUpperCase() == "PC")) {
+                        (selectedType.typeName.toUpperCase() != "IMPRIMANTE" && selectedType.typeName.toUpperCase() != "MULTIFONCTION"
+                            && selectedType.typeName.toUpperCase() != "SCANNER")) {
                         submit = false
                         address.current.classList.add("errorClass")
                         notify("warning", "Cet Rang est reservé pour les Accessoires Informatique")
                     }
-                    // else if (Number(address.current.value.split(".")[3]) < 10) {
-                    //     submit = false
-                    //     address.current.classList.add("errorClass")
-                    //     notify("warning", "Cet Rang est reservé")
-                    // }
+                    else if (Number(address.current.value.split(".")[3]) <= 1) {
+                        submit = false
+                        address.current.classList.add("errorClass")
+                        notify("warning", "Cet Rang est reservé")
+                    }
+                    else if (Number(address.current.value.split(".")[3]) <= 9 && user.role != "ROLE_ADMIN") {
+                        submit = false
+                        address.current.classList.add("errorClass")
+                        notify("warning", "Cet Rang est reservé pour Admins")
+                    }
                     else if (Number(address.current.value.split(".")[3]) >= 80 &&
-                        (selectedType.typeName.toUpperCase() != "LAPTOP" && selectedType.typeName.toUpperCase() != "PC")) {
+                        (selectedType.typeName.toUpperCase() == "SCANNER" || selectedType.typeName.toUpperCase() == "IMPRIMANTE" || selectedType.typeName.toUpperCase() == "MULTIFONCTION")) {
                         submit = false
                         address.current.classList.add("errorClass")
                         notify("warning", "Cet Rang est reservé pour PCs")
@@ -246,7 +231,9 @@ const Line = React.memo(({ setGenerateType, firstIp, display, removeLigne, setFi
             else if (firstOctetAddress > 127 && 192 > firstOctetAddress) {
 
                 if (Number(address.current.value.split(".")[2]) != 0) {
-                    if (Number(selectedType.typeName.toUpperCase() != "LAPTOP" && selectedType.typeName.toUpperCase() != "PC")) {
+                    if (Number(selectedType.typeName.toUpperCase() == "IMPRIMANTE" ||
+                        selectedType.typeName.toUpperCase() == "SCANNER" ||
+                        selectedType.typeName.toUpperCase() == "MULTIFONCTION")) {
                         submit = false
                         address.current.classList.add("errorClass")
                         notify("warning", "Cet Rang est reservé pour PCs")
@@ -254,18 +241,26 @@ const Line = React.memo(({ setGenerateType, firstIp, display, removeLigne, setFi
                 }
                 else {
                     if (Number(address.current.value.split(".")[3]) >= 10 && Number(address.current.value.split(".")[3]) <= 79 &&
-                        (selectedType.typeName.toUpperCase() == "LAPTOP" || selectedType.typeName.toUpperCase() == "PC")) {
+                        (selectedType.typeName.toUpperCase() != "IMPRIMANTE" && selectedType.typeName.toUpperCase() != "MULTIFONCTION"
+                            && selectedType.typeName.toUpperCase() != "SCANNER")) {
                         submit = false
                         address.current.classList.add("errorClass")
                         notify("warning", "Cet Rang est reservé pour les Accessoires Informatique")
                     }
-                    // else if (Number(address.current.value.split(".")[3]) < 10) {
-                    //     submit = false
-                    //     address.current.classList.add("errorClass")
-                    //     notify("warning", "Cet Rang est reservé")
-                    // }
+                    else if (Number(address.current.value.split(".")[3]) <= 1) {
+                        submit = false
+                        address.current.classList.add("errorClass")
+                        notify("warning", "Cet Rang est reservé")
+                    }
+                    else if (Number(address.current.value.split(".")[3]) <= 9 && user.role != "ROLE_ADMIN") {
+                        submit = false
+                        address.current.classList.add("errorClass")
+                        notify("warning", "Cet Rang est reservé pour Admins")
+                    }
                     else if (Number(address.current.value.split(".")[3]) >= 80 &&
-                        (selectedType.typeName.toUpperCase() != "LAPTOP" && selectedType.typeName.toUpperCase() != "PC")) {
+                        (selectedType.typeName.toUpperCase() == "SCANNER" ||
+                            selectedType.typeName.toUpperCase() == "IMPRIMANTE" ||
+                            selectedType.typeName.toUpperCase() == "MULTIFONCTION")) {
                         submit = false
                         address.current.classList.add("errorClass")
                         notify("warning", "Cet Rang est reservé pour PCs")
@@ -274,18 +269,26 @@ const Line = React.memo(({ setGenerateType, firstIp, display, removeLigne, setFi
             }
             else {
                 if (Number(address.current.value.split(".")[3]) >= 10 && Number(address.current.value.split(".")[3]) <= 79 &&
-                    (selectedType.typeName.toUpperCase() == "LAPTOP" || selectedType.typeName.toUpperCase() == "PC")) {
+                    (selectedType.typeName.toUpperCase() != "IMPRIMANTE" && selectedType.typeName.toUpperCase() != "MULTIFONCTION"
+                        && selectedType.typeName.toUpperCase() != "SCANNER")) {
                     submit = false
                     address.current.classList.add("errorClass")
                     notify("warning", "Cet Rang est reservé pour les Accessoires Informatique")
                 }
-                // else if (Number(address.current.value.split(".")[3]) < 10) {
-                //     submit = false
-                //     address.current.classList.add("errorClass")
-                //     notify("warning", "Cet Rang est reservé")
-                // }
+                else if (Number(address.current.value.split(".")[3]) <= 1) {
+                    submit = false
+                    address.current.classList.add("errorClass")
+                    notify("warning", "Cet Rang est reservé")
+                }
+                else if (Number(address.current.value.split(".")[3]) <= 9 && user.role != "ROLE_ADMIN") {
+                    submit = false
+                    address.current.classList.add("errorClass")
+                    notify("warning", "Cet Rang est reservé pour Admins")
+                }
                 else if (Number(address.current.value.split(".")[3]) >= 80 &&
-                    (selectedType.typeName.toUpperCase() != "LAPTOP" && selectedType.typeName.toUpperCase() != "PC")) {
+                    (selectedType.typeName.toUpperCase() == "SCANNER" ||
+                        selectedType.typeName.toUpperCase() == "IMRIMANTE" ||
+                        selectedType.typeName.toUpperCase() == "MULTIFONCTION")) {
                     submit = false
                     address.current.classList.add("errorClass")
                     notify("warning", "Cet Rang est reservé pour PCs")

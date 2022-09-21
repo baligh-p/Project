@@ -136,9 +136,11 @@ const Statistic = () => {
                                 },
                             ],
                         };
-                        return (<div key={index} className='t-h-full t-mx-5 lg:t-w-[25%] t-mb-10 t-w-full t-bg-white t-shadow-xl t-shadow-neutral-200 t-p-3 t-rounded-xl'>
+                        if (sum(element)) return (<div key={index} className='t-h-full t-mx-5 lg:t-w-[25%] t-mb-10 t-w-full t-bg-white t-shadow-xl t-shadow-neutral-200 t-p-3 t-rounded-xl'>
                             <div className='t-w-full t-flex t-items-center'>
                                 <h2 className='t-mb-1 t-text-blue-500 t-font-bold t-tracking-widest t-text-[20px]'>{element}</h2>
+
+
                                 <p className='t-text-neutral-900 t-font-bold t-ml-auto t-text-[20px] t-tracking-wide'>{sum(element)}</p>
                             </div>
                             <Doughnut

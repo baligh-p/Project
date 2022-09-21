@@ -468,7 +468,7 @@ const ListPage = () => {
                                 return address + (index + 80)
                             }
                         }
-                        return address + (sortedTable.length + 79)
+                        return address + (sortedTable.filter((element) => Number(element.address.split(".")[3]) >= 80).length + 80)
                     }
                     else {
                         for (var index = 0; index < sortedTable.length; index++) {
@@ -543,9 +543,10 @@ const ListPage = () => {
                         </div>
                         <div className='t-ml-2 t-overflow-hidden'>
                             {ipDisponible() && <p className='t-text-[25px] t-text-white t-font-body t-font-bold t-break-words'>{
-                                ipDisponible() - ips?.filter((element) => element.type.typeName.toUpperCase().startsWith("LAPTOP")
-                                    || element.type.typeName.toUpperCase().startsWith("PC")).length + 76 > 999 ? "+1000" :
-                                    (ipDisponible() - (ips?.filter((element) => element.type.typeName.toUpperCase().startsWith("LAPTOP") || element.type.typeName.toUpperCase().startsWith("PC")).length + 76))}</p>}
+                                ipDisponible() - ips?.filter((element) => element.type.typeName.toUpperCase().startsWith("IMRIMANTE")
+                                    || element.type.typeName.toUpperCase().startsWith("SCANNER") || element.type.typeName.toUpperCase().startsWith("MULTIFONCTION")).length + 76 > 999 ? "+1000" :
+                                    (ipDisponible() - (ips?.filter((element) => !element.type.typeName.toUpperCase().startsWith("IMRIMANTE")
+                                        && !element.type.typeName.toUpperCase().startsWith("SCANNER") && !element.type.typeName.toUpperCase().startsWith("MULTIFONCTION")).length + 78))}</p>}
                             <p className='t-text-[13px] t-text-white t-font-body'>Adresses IP disponibles (PC)</p>
                         </div>
                     </div>
@@ -554,7 +555,7 @@ const ListPage = () => {
                             <img src="/assets/icons/printer.png" className='t-h-[70px]   t-relative t-left-4 t-mr-7 t-w-[70px] ' />
                         </div>
                         <div className='t-ml-2 t-overflow-hidden'>
-                            {ipDisponible() && <p className='t-text-[25px] t-text-white t-font-body t-font-bold t-break-words'>{69 - ips?.filter((element) => !element.type.typeName.toUpperCase().startsWith("LAPTOP") && !element.type.typeName.toUpperCase().startsWith("PC")).length}</p>}
+                            {ipDisponible() && <p className='t-text-[25px] t-text-white t-font-body t-font-bold t-break-words'>{70 - ips?.filter((element) => element.type.typeName.toUpperCase().startsWith("SCANNER") || element.type.typeName.toUpperCase().startsWith("IMPRIMANTE") || element.type.typeName.toUpperCase().startsWith("MULTIFONCTION")).length}</p>}
                             <p className='t-text-[13px] t-text-white t-font-body '>Adresses IP disponibles (Accessoires)</p>
                         </div>
                     </div>
