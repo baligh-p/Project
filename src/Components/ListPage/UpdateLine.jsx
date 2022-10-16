@@ -252,18 +252,16 @@ const UpdateLine = React.memo(({ display, removeLigne, setFirstGet, data, firstG
             }
             else {
                 if (Number(address.current.value.split(".")[3]) >= 10 && Number(address.current.value.split(".")[3]) <= 79 &&
-                    (selectedType.typeName.toUpperCase() == "LAPTOP" || selectedType.typeName.toUpperCase() == "PC")) {
+                    (selectedType.typeName.toUpperCase() != "IMPRIMANTE" && selectedType.typeName.toUpperCase() != "MULTIFONCTION"
+                        && selectedType.typeName.toUpperCase() != "SCANNER")) {
                     submit = false
                     address.current.classList.add("errorClass")
                     notify("warning", "Cet Rang est reservé pour les Accessoires Informatique")
                 }
-                // else if (Number(address.current.value.split(".")[3]) < 10) {
-                //     submit = false
-                //     address.current.classList.add("errorClass")
-                //     notify("warning", "Cet Rang est reservé")
-                // }
                 else if (Number(address.current.value.split(".")[3]) >= 80 &&
-                    (selectedType.typeName.toUpperCase() != "LAPTOP" && selectedType.typeName.toUpperCase() != "PC")) {
+                    (selectedType.typeName.toUpperCase() == "SCANNER" ||
+                        selectedType.typeName.toUpperCase() == "IMPRIMANTE" ||
+                        selectedType.typeName.toUpperCase() == "MULTIFONCTION")) {
                     submit = false
                     address.current.classList.add("errorClass")
                     notify("warning", "Cet Rang est reservé pour PCs")

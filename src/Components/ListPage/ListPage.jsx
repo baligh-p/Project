@@ -543,9 +543,9 @@ const ListPage = () => {
                         </div>
                         <div className='t-ml-2 t-overflow-hidden'>
                             {ipDisponible() && <p className='t-text-[25px] t-text-white t-font-body t-font-bold t-break-words'>{
-                                ipDisponible() - ips?.filter((element) => element.type.typeName.toUpperCase().startsWith("IMRIMANTE")
+                                ipDisponible() - ips?.filter((element) => element.type.typeName.toUpperCase().startsWith("IMPRIMANTE")
                                     || element.type.typeName.toUpperCase().startsWith("SCANNER") || element.type.typeName.toUpperCase().startsWith("MULTIFONCTION")).length + 76 > 999 ? "+1000" :
-                                    (ipDisponible() - (ips?.filter((element) => !element.type.typeName.toUpperCase().startsWith("IMRIMANTE")
+                                    (ipDisponible() - (ips?.filter((element) => !element.type.typeName.toUpperCase().startsWith("IMPRIMANTE")
                                         && !element.type.typeName.toUpperCase().startsWith("SCANNER") && !element.type.typeName.toUpperCase().startsWith("MULTIFONCTION")).length + 78))}</p>}
                             <p className='t-text-[13px] t-text-white t-font-body'>Adresses IP disponibles (PC)</p>
                         </div>

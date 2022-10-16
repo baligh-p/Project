@@ -185,7 +185,7 @@ const SideBar = () => {
             <div ref={sideBar} className='sideBar t-font-body lg:t-w-[20.5%] t-w-full t-z-50 t-fixed lg:t-top-0 t-top-[4.3rem] t-duration-500 t-delay-75 lg:t-left-0 -t-left-full  t-bg-[#202020] t-h-full t-px-5 t-py-3'>
                 <div className='t-h-[4.3rem] lg:t-h-min lg:t-mt-1 t-flex t-items-center lg:t-w-auto t-w-full t-bg-[#202020] lg:t-static t-fixed t-top-0 t-left-0'>
                     <div id="burger" onClick={toggleSideBar}><div className="burgerLight t-flex lg:t-hidden t-z-20 t-ml-4"></div></div>
-                    <h1 className='t-text-white t-text-bold t-tracking-widest t-text-[27px] t-ml-4 lg:t-ml-0'>WebSite</h1>
+                    <h1 className='t-text-white t-text-bold t-tracking-widest t-text-[27px] t-ml-4 lg:t-ml-0'>IPManager</h1>
                     {(showSecondSideBar) && (<div onClick={() => {
                         setShowSecondSideBar(() => false)
                     }} className='t-ml-auto t-relative lg:t-top-1 lg:t-mr-0 t-mr-3 t-cursor-pointer'>

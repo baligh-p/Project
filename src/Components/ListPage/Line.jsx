@@ -287,7 +287,7 @@ const Line = React.memo(({ setGenerateType, firstIp, display, removeLigne, setFi
                 }
                 else if (Number(address.current.value.split(".")[3]) >= 80 &&
                     (selectedType.typeName.toUpperCase() == "SCANNER" ||
-                        selectedType.typeName.toUpperCase() == "IMRIMANTE" ||
+                        selectedType.typeName.toUpperCase() == "IMPRIMANTE" ||
                         selectedType.typeName.toUpperCase() == "MULTIFONCTION")) {
                     submit = false
                     address.current.classList.add("errorClass")

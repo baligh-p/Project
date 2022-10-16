@@ -70,7 +70,7 @@ const LoginPage = () => {
                 <div className='t-min-h-screen lg:t-flex t-hidden t-w-7/12 t-bg-neutral-900 selection:t-bg-white selection:t-text-blue-300'>
                     <div className='t-mx-auto t-relative t-right-10 t-flex t-flex-col t-items-center t-justify-center'>
                         <img className='t-h-[70vh] t-mb-1 t-w-[37vw]' src="/assets/icons/loginration.png" alt="" />
-                        <h1 className='t-text-[32px] t-text-white t-w-10/12 t-text-center t-mx-auto'>Website</h1>
+                        <h1 className='t-text-[32px] t-text-white t-w-10/12 t-text-center t-mx-auto'>IPManager</h1>
                     </div>
                 </div>
                 <form className='selection:t-bg-blue-300 selection:t-text-white t-py-5 lg:t-py-12 lg:t-w-5/12 t-w-full t-shadow-lg t-shadow-black/20 lg:t-relative t-bottom-5 t-rounded-lg t-right-24 t-bg-white t-min-h-screen lg:t-min-h-min t-flex t-flex-col t-items-center t-justify-center'>

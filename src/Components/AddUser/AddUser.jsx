@@ -15,8 +15,16 @@ const AddUser = () => {
     const [name, setName] = useState("")
     const [valid, setValid] = useState(false)
     const [validConfirm, setValidConfirm] = useState(false)
+    const [validChange, setValidChange] = useState(false)
+    const [validConfirmChange, setValidConfirmChange] = useState(false)
     const [toggle, setToggle] = useState(false)
     const [users, setUsers] = useState([])
+    const changerPWDContainer = useRef(null)
+    const [isLoadingChangePWD, setIsLoadingChangePWD] = useState(false)
+    const [changePassword, setChangePassword] = useState("")
+    const [confirmChange, setConfirmChange] = useState("")
+
+    const [selectedUserForUpdate, setSelectedUserForUpdate] = useState(null)
 
     const [user, setUser] = useRecoilState(UserAtom)
 
@@ -66,15 +74,15 @@ const AddUser = () => {
                                     getRequest()
                                 }
                                 else {
-                                    // setUser({ isLogged: false, id: null, username: null, role: null })
-                                    // localStorage.clid = ""
+                                    setUser({ isLogged: false, id: null, username: null, role: null })
+                                    localStorage.clid = ""
                                 }
                             }).catch((err) => {
                                 if (err.code !== "ERR_CANCELED") notify("error", "Erreur d'execution de requete")
                             })
                         } else {
-                            // setUser({ isLogged: false, id: null, username: null, role: null })
-                            // localStorage.clid = ""
+                            setUser({ isLogged: false, id: null, username: null, role: null })
+                            localStorage.clid = ""
                         }
                     }
                     else if (response.status == 200) {
@@ -111,7 +119,20 @@ const AddUser = () => {
         }
     }, [password, confirm])
 
-
+    useEffect(() => {
+        if (changePassword.length < 6 && changePassword != "") {
+            setValidChange(false)
+        }
+        else {
+            setValidChange(true)
+        }
+        if (changePassword != confirmChange) {
+            setValidConfirmChange(true)
+        }
+        else {
+            setValidConfirmChange(false)
+        }
+    }, [changePassword, confirmChange])
 
 
 
@@ -257,6 +278,102 @@ const AddUser = () => {
         return time + " " + date
     }
 
+    const changePwd = async (user) => {
+        await setSelectedUserForUpdate(user)
+        changerPWDContainer.current.style.display = "flex"
+    }
+    const handleResetPWD = (e) => {
+        e.preventDefault()
+        var submit = true
+        if (changePassword != confirmChange || changePassword.length < 6) {
+            submit = false
+        }
+        if (submit) {
+            setIsLoadingChangePWD(true)
+            const data = JSON.stringify({
+                userId: selectedUserForUpdate.id,
+                newPassword: changePassword,
+                oldPassword: null,
+            })
+
+            const postRequest = (data) => {
+                customAxios.put(`/user/adminChangePassword`, data, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.access_tkn}`,
+                        "Content-Type": "application/json"
+                    },
+                }).then((response) => {
+                    setIsLoadingChangePWD(false)
+                    if (response.data.success) {
+                        setChangePassword("")
+                        setConfirmChange("")
+                        changerPWDContainer.current.reset()
+                        changerPWDContainer.current.style.display = "none"
+                        notify("success", "mot de passe de " + selectedUserForUpdate.username + " est modifié avec succé")
+                    }
+                    else {
+                        notify("error", "Erreur d'execution de requéte")
+                    }
+                })
+            }
+
+            customAxios.put(`/user/adminChangePassword`, data, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.access_tkn}`,
+                    "Content-Type": "application/json"
+                },
+            })
+                .then((response) => {
+                    console.log(response.data)
+                    if (response.data.type && response.data.type == "token") {
+                        if (response.data.error.startsWith("The Token has expired on")) {
+                            customAxios.get("/tkn/refresh", {
+                                headers: {
+                                    Authorization: `Bearer ${localStorage.refresh_tkn}`,
+                                },
+                            }).then(async (res) => {
+                                if (res.data.type != "token") {
+                                    localStorage.access_tkn = res.data.access_token
+                                    localStorage.refresh_tkn = res.data.refresh_token
+                                    //fn
+                                    postRequest(data)
+                                }
+                                else {
+                                    setUser({ isLogged: false, id: null, username: null, role: null })
+                                    localStorage.clid = ""
+                                }
+                            }).catch((err) => {
+                                if (err.code !== "ERR_CANCELED") notify("error", "Erreur d'execution de requete")
+                            })
+                        } else {
+                            setUser({ isLogged: false, id: null, username: null, role: null })
+                            localStorage.clid = ""
+                        }
+                    }
+                    else if (response.status == 200) {
+                        setIsLoadingChangePWD(false)
+                        if (response.data.success) {
+                            setChangePassword("")
+                            setConfirmChange("")
+                            changerPWDContainer.current.reset()
+                            changerPWDContainer.current.style.display = "none"
+                            notify("success", "mot de passe de " + selectedUserForUpdate.username + " est modifié avec succé")
+                        }
+                        else {
+                            notify("error", "Erreur d'execution de requéte")
+                        }
+                    }
+                    else {
+                        notify("error", "Erreur d'execution de requete")
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                    setIsLoadingChangePWD(false)
+                    if (err.code !== "ERR_CANCELED") notify("error", "Erreur d'execution de requete")
+                })
+        }
+    }
     if (user?.role == "ROLE_ADMIN") return (
         <div className='lg:t-w-[79.5%] t-w-full t-h-full t-ml-auto t-relative lg:t-top-[25px] t-top-[5rem]'>
             <div className='t-w-10/12 t-mb-5 t-mx-auto t-space-x-16 t-hidden lg:t-flex'>
@@ -287,7 +404,7 @@ const AddUser = () => {
                             </svg>
                         </div>
                         <div className='t-w-full t-mb-7'>
-                            <h2 className='t-tracking-widest t-text-center t-mx-auto t-font-bold t-text-blue-500 t-text-[28px]'>Ajouter Un Utilisateur</h2>
+                            <h2 className='t-tracking-widest t-text-center t-mx-auto t-font-bold t-text-blue-500 t-text-[28px]'>Ajouter un Utilisateur</h2>
                         </div>
                         <div className='t-z-10 lg:t-w-8/12 t-w-[97%] md:t-w-7/12 t-mx-auto'>
                             <div className='t-flex t-space-y-1 t-flex-col t-w-full t-mb-10 lg:t-mb-6'>
@@ -331,6 +448,45 @@ const AddUser = () => {
                         </div>
                     </div>
                 </form>
+                {/*  */}
+                <form ref={changerPWDContainer} onClick={(e) => { if (e.target == changerPWDContainer.current) changerPWDContainer.current.style.display = "none" }} style={{ display: "none" }} className='lg:t-w-[79.5%] lg:t-min-screen t-w-full lg:t-h-full t-bg-neutral-200/30 lg:t-fixed t-overflow-scroll t-z-20 t-top-0 t-right-0 t-flex t-items-center t-justify-center'>
+                    <div className='t-bg-white lg:t-w-1/2 t-w-full t-shadow-lg t-shadow-neutral-200 lg:t-rounded-lg t-p-6'>
+                        <div onClick={() => { changerPWDContainer.current.style.display = "none" }} className='t-w-full t-flex t-justify-end t-relative t-bottom-7 t-left-5 lg:t-left-7 t-cursor-pointer t-h-3'>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="40" width="40">
+                                <path d="m10.542 30.958-1.5-1.5 9.5-9.458-9.5-9.458 1.5-1.5 9.458 9.5 9.458-9.5 1.5 1.5-9.5 9.458 9.5 9.458-1.5 1.5-9.458-9.5Z" />
+                            </svg>
+                        </div>
+                        <div className='t-w-full t-mb-7'>
+                            <h2 className='t-tracking-widest t-text-center t-mx-auto t-font-bold t-text-blue-500 t-text-[25px] '>Changer mot de <span className='t-text-neutral-800'>{selectedUserForUpdate?.username}</span></h2>
+                        </div>
+                        <div className='t-z-10 lg:t-w-8/12 t-w-[97%] md:t-w-7/12 t-mx-auto'>
+                            <div className='t-flex t-space-y-1 t-flex-col t-w-full t-mb-10 lg:t-mb-6'>
+                                <label onClick={(e) => { e.target.parentNode.children[1].focus() }} className='t-relative t-h-0 t-duration-150 t-left-1 t-cursor-text t-select-none t-text-stone-700 lg:t-translate-y-[18px] t-translate-y-[15px] t-text-[15px] lg:t-text-sm'>Mot de passe</label>
+                                <input onInput={(e) => { setChangePassword(e.target.value); }} onFocus={handleFocus} onBlur={handleBlur} type="password" className="t-bg-white t-duration-150 t-outline-none t-text-[17px] lg:t-text-base t-h-10 t-px-1 t-border-b-2 t-border-stone-200" />
+                            </div>
+                            <div className='t-flex t-space-y-1 t-flex-col t-w-full t-mb-10 lg:t-mb-8'>
+                                <label onClick={(e) => { e.target.parentNode.children[1].focus() }} className='t-relative t-h-0 t-duration-150 t-left-1 t-cursor-text t-select-none t-text-stone-700 lg:t-translate-y-[18px] t-translate-y-[15px] t-text-[15px] lg:t-text-sm'>Confirmer Mot de Passe</label>
+                                <input onInput={(e) => { setConfirmChange(e.target.value); }} onFocus={handleFocus} onBlur={handleBlur} type="password" className="t-bg-white t-duration-150 t-outline-none t-text-[17px] lg:t-text-base t-h-10 t-px-1 t-border-b-2 t-border-stone-200" />
+                            </div>
+                        </div>
+                        {!validChange && <div className={`t-fill-red-500 t-mx-auto lg:t-w-8/12 t-w-10/12 md:t-w-8/12 t-mt-6 t-flex t-items-center t-space-x-1 `}>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
+                                <path d="M12 17.2q.5 0 .838-.338.337-.337.337-.837 0-.5-.337-.837-.338-.338-.838-.338-.5 0-.837.338-.338.337-.338.837 0 .5.338.837.337.338.837.338ZM10.85 13h2.3V6.875h-2.3ZM12 22.2q-2.125 0-3.988-.8-1.862-.8-3.237-2.175Q3.4 17.85 2.6 15.988 1.8 14.125 1.8 12t.8-3.988q.8-1.862 2.175-3.237Q6.15 3.4 8.012 2.6 9.875 1.8 12 1.8t3.988.8q1.862.8 3.237 2.175Q20.6 6.15 21.4 8.012q.8 1.863.8 3.988t-.8 3.988q-.8 1.862-2.175 3.237Q17.85 20.6 15.988 21.4q-1.863.8-3.988.8Zm0-2.275q3.325 0 5.625-2.3t2.3-5.625q0-3.325-2.3-5.625T12 4.075q-3.325 0-5.625 2.3T4.075 12q0 3.325 2.3 5.625t5.625 2.3ZM12 12Z" />
+                            </svg>
+                            <p className='t-text-red-500 t-select-none t-text-[12px] t-font-semibold'>Le Mot de Passe doit avoir au minimum 6 caracteres</p>
+                        </div>}
+                        {validConfirmChange && <div className={`t-fill-red-500 t-mx-auto lg:t-w-8/12 t-w-10/12 md:t-w-8/12 t-flex t-items-center t-space-x-1 `}>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
+                                <path d="M12 17.2q.5 0 .838-.338.337-.337.337-.837 0-.5-.337-.837-.338-.338-.838-.338-.5 0-.837.338-.338.337-.338.837 0 .5.338.837.337.338.837.338ZM10.85 13h2.3V6.875h-2.3ZM12 22.2q-2.125 0-3.988-.8-1.862-.8-3.237-2.175Q3.4 17.85 2.6 15.988 1.8 14.125 1.8 12t.8-3.988q.8-1.862 2.175-3.237Q6.15 3.4 8.012 2.6 9.875 1.8 12 1.8t3.988.8q1.862.8 3.237 2.175Q20.6 6.15 21.4 8.012q.8 1.863.8 3.988t-.8 3.988q-.8 1.862-2.175 3.237Q17.85 20.6 15.988 21.4q-1.863.8-3.988.8Zm0-2.275q3.325 0 5.625-2.3t2.3-5.625q0-3.325-2.3-5.625T12 4.075q-3.325 0-5.625 2.3T4.075 12q0 3.325 2.3 5.625t5.625 2.3ZM12 12Z" />
+                            </svg>
+                            <p className='t-text-red-500 t-select-none t-text-[12px] t-font-semibold'>Veuillez confirmer correctement votre mot de passe</p>
+                        </div>}
+                        <div className='t-z-10 t-mx-auto lg:t-w-8/12 t-w-10/12 md:t-w-8/12 t-mt-10'>
+                            {!isLoadingChangePWD && (<button onClick={handleResetPWD} disabled={changePassword.length < 6 || changePassword != confirmChange} className={`t-will-change-auto ${(changePassword.length >= 6 && changePassword == confirmChange) ? "hover:t-text-blue-400 hover:t-bg-white hover:t-shadow-none" : "t-opacity-30 t-cursor-not-allowed"} t-border-blue-400 t-border-2 t-duration-200 t-delay-75 t-h-12 lg:t-w-28 t-w-full t-text-white t-bg-blue-400 t-text-lg t-rounded-md t-shadow-lg t-shadow-blue-300`}>Créer</button>)
+                                || (<Loader className="lg:t-mx-0 t-mx-auto" height="40px" size="35px" border="6px" color="#60a5fa" />)}
+                        </div>
+                    </div>
+                </form>
                 <div className='lg:t-w-10/12 t-mx-auto t-mt-5'>
                     <button onClick={() => { container.current.style.display = "flex" }} className='t-text-white opacityAnimation t-shadow-md t-duration-200  t-fill-white hover:t-fill-blue-500 t-flex t-items-center t-justify-end t-delay-75 t-ml-auto lg:t-mr-5 t-rounded-md t-bg-blue-500 t-border-2 t-border-blue-500 hover:t-bg-white hover:t-text-blue-500 t-h-min lg:t-px-4 t-px-1 t-py-2'>
                         <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M11 19v-6H5v-2h6V5h2v6h6v2h-6v6Z" /></svg>
@@ -353,6 +509,9 @@ const AddUser = () => {
                                 <th scope="col" className="t-py-3 t-px-6">
                                     Date Création
                                 </th>
+                                <th scope="col" className='t-py-3 t-px-6'>
+                                    changer mot de passe
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -369,6 +528,13 @@ const AddUser = () => {
                                     </td>
                                     <td className="t-py-4 t-px-6">
                                         {element.createdAt && (formatData(element.createdAt))}
+                                    </td>
+                                    <td onClick={() => { changePwd(element) }} className='t-py-4 t-px-6 t-flex t-items-center t-justify-center'>
+                                        <div className='t-p-0.5 t-rounded-full t-fill-white hover:t-fill-blue-500 t-border-2 t-duration-300 t-delay-75 t-border-transparent hover:t-border-blue-500 hover:t-bg-white t-bg-blue-500 t-cursor-pointer t-w-min'>
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
+                                                <path d="M5 19h1.4l8.625-8.625-1.4-1.4L5 17.6ZM19.3 8.925l-4.25-4.2 1.4-1.4q.575-.575 1.413-.575.837 0 1.412.575l1.4 1.4q.575.575.6 1.388.025.812-.55 1.387ZM17.85 10.4 7.25 21H3v-4.25l10.6-10.6Zm-3.525-.725-.7-.7 1.4 1.4Z" />
+                                            </svg>
+                                        </div>
                                     </td>
                                 </tr>
                             })}
