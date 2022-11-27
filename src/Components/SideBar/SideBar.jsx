@@ -203,7 +203,7 @@ const SideBar = () => {
                             </svg>
                             <h3 className='t-text-body lg:t-text-[14px] t-text-[18px] t-tracking-wider'>Statistiques</h3>
                         </Link>
-                        <Link to={"/IP_List/" + (direction ? direction : directions[0]?.directionName)} onClick={() => { setShowSecondSideBar(true) }} className='IP_List t-select-none t-text-body t-cursor-pointer hover:t-relative hover:t-left-1 t-w-full t-px-2  t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
+                        <Link to={"/IP_List/" + (direction ? direction : directions[0]?.directionName)} onClick={() => { setShowSecondSideBar(true) }} className='IP_List t-select-none t-text-body t-cursor-pointer hover:t-relative t-w-full t-px-2 t-rounded-md t-py-2 t-mx-auto t-flex t-items-center'>
                             <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
                                 <path d="M4.35 19.275q-.5 0-.85-.35t-.35-.85q0-.5.35-.85t.85-.35q.5 0 .85.35t.35.85q0 .5-.35.85t-.85.35Zm3.9-.525V17.4h12.6v1.35Zm-3.9-5.575q-.5 0-.85-.35t-.35-.85q0-.5.35-.85t.85-.35q.5 0 .85.35t.35.85q0 .5-.35.85t-.85.35Zm3.9-.525V11.3h12.6v1.35Zm-3.9-5.575q-.5 0-.85-.35t-.35-.85q0-.5.35-.85t.85-.35q.5 0 .85.35t.35.85q0 .5-.35.85t-.85.35Zm3.9-.525V5.2h12.6v1.35Z" />
                             </svg>

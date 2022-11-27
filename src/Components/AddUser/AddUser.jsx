@@ -487,7 +487,7 @@ const AddUser = () => {
                         </div>
                     </div>
                 </form>
-                <div className='lg:t-w-10/12 t-mx-auto t-mt-5'>
+                <div className='lg:t-w-10/12 lg:t-mx-auto t-mt-5'>
                     <button onClick={() => { container.current.style.display = "flex" }} className='t-text-white opacityAnimation t-shadow-md t-duration-200  t-fill-white hover:t-fill-blue-500 t-flex t-items-center t-justify-end t-delay-75 t-ml-auto lg:t-mr-5 t-rounded-md t-bg-blue-500 t-border-2 t-border-blue-500 hover:t-bg-white hover:t-text-blue-500 t-h-min lg:t-px-4 t-px-1 t-py-2'>
                         <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M11 19v-6H5v-2h6V5h2v6h6v2h-6v6Z" /></svg>
                         <p className='t-text-[14px]'>Ajouter</p>
@@ -509,9 +509,7 @@ const AddUser = () => {
                                 <th scope="col" className="t-py-3 t-px-6">
                                     Date Création
                                 </th>
-                                <th scope="col" className='t-py-3 t-px-6'>
-                                    changer mot de passe
-                                </th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -529,13 +527,7 @@ const AddUser = () => {
                                     <td className="t-py-4 t-px-6">
                                         {element.createdAt && (formatData(element.createdAt))}
                                     </td>
-                                    <td onClick={() => { changePwd(element) }} className='t-py-4 t-px-6 t-flex t-items-center t-justify-center'>
-                                        <div className='t-p-0.5 t-rounded-full t-fill-white hover:t-fill-blue-500 t-border-2 t-duration-300 t-delay-75 t-border-transparent hover:t-border-blue-500 hover:t-bg-white t-bg-blue-500 t-cursor-pointer t-w-min'>
-                                            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
-                                                <path d="M5 19h1.4l8.625-8.625-1.4-1.4L5 17.6ZM19.3 8.925l-4.25-4.2 1.4-1.4q.575-.575 1.413-.575.837 0 1.412.575l1.4 1.4q.575.575.6 1.388.025.812-.55 1.387ZM17.85 10.4 7.25 21H3v-4.25l10.6-10.6Zm-3.525-.725-.7-.7 1.4 1.4Z" />
-                                            </svg>
-                                        </div>
-                                    </td>
+
                                 </tr>
                             })}
                         </tbody>

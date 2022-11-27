@@ -289,7 +289,7 @@ const AddDirection = () => {
                 </div>
             </div>}
             <div className='lg:t-h-[95%] t-h-full lg:t-p-7 t-py-7 t-px-0 lg:t-w-3/5 t-w-full t-bg-white'>
-                <form className='t-flex t-h-full lg:t-relative lg:-t-top-10 t-flex-col t-items-end t-space-y-2 t-justify-end t-mx-auto lg:t-w-8/12 t-w-11/12 md:t-w-8/12 t-z-20'>
+                <form className='t-flex t-h-full lg:t-relative lg:-t-top-10 t-flex-col t-items-end t-space-y-2 lg:t-justify-end t-justify-center t-mx-auto lg:t-w-8/12 t-w-11/12 md:t-w-8/12 t-z-20'>
                     <div className='t-flex t-items-center t-justify-end t-w-full t-relative'>
                         <div className='t-flex t-flex-col t-w-full t-mx-auto'>
                             <label onClick={(e) => { e.target.parentNode.children[1].focus() }} className='t-relative t-w-min t-h-0 t-duration-150 t-left-2 t-text-blue-500 t-cursor-text t-select-none  lg:t-translate-y-[18px] t-translate-y-[15px] t-text-[15px] lg:t-text-sm'>Direction</label>
